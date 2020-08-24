@@ -1,0 +1,138 @@
+﻿@model IEnumerable<Magazyn.Domain.Entities.Partner>
+
+@{
+    ViewBag.Title = "Administracja: Partnerzy";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    if (Session["userID"] == null)
+    {
+        Response.Redirect("~/Account/Login");
+    }
+
+}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: sans-serif;
+    }
+
+    .delete, .blank {
+        background-color: #4CAF50;
+        border: solid 2px;
+        border-color: black;
+        color: white;
+        padding: 6px 6px;
+        padding-bottom: 5px;
+        text-decoration: none;
+        margin: 5px 2px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    input[type=button], input[type=submit], input[type=reset] {
+        background-color: #4CAF50;
+        border-radius: 3px;
+        border-color: black;
+        color: white;
+        padding: 6px 6px;
+        text-decoration: none;
+        margin: 2px 2px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    .menu-bar {
+        background: rgba(20, 23, 20, 0.95);
+        text-align: center;
+        font-size: 16px;
+        border-bottom-width: 6px;
+        border-bottom-style: solid;
+        border-bottom-color: forestgreen;
+    }
+
+        .menu-bar ul {
+            display: inline-flex;
+            list-style: none;
+            color: #fff;
+        }
+
+            .menu-bar ul li {
+                width: 170px;
+                margin: 4px;
+                padding: 1px;
+            }
+
+                .menu-bar ul li a {
+                    text-decoration: none;
+                    color: #fff;
+                }
+
+                .active, .menu-bar ul li:hover {
+                    background: #2bab0d;
+                    border-radius: 3px;
+                }
+
+        .menu-bar .fa {
+            margin-right: 7px;
+        }
+</style>
+<div class="menu-bar" role="navigation">
+    <ul>
+        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Produkty", "Index")</a></li>
+        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Partnerzy", "Partner")</a></li>
+        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Zestawy", "Zestaw")</a></li>
+        <li><i class="fa fa-users"></i>@Html.ActionLink("Użytkownicy", "DaneUżytkowników")</a></li>
+        <li><i class="fa fa-address-book"></i>@Html.ActionLink("Zamówienia", "Zamowienia")</a></li>
+        <li><i class="fa fa-calendar"></i> @Html.ActionLink("Operacje", "Magazyn")</a></li>
+    </ul>
+    <ul>
+        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty MM", "MM")</a></li>
+        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty PW", "PW")</a></li>
+        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty PZ", "PZ")</a></li>
+        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty RW", "RW")</a></li>
+        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty RZ", "RZ")</a></li>
+        <li><i class="fa fa fa-home"></i>@Html.ActionLink("Wyloguj", "../Account/Login")</a></li>
+    </ul>
+</div>
+
+
+
+
+<div class="panel-body">
+    <table class="table table-striped table-condensed table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Nazwa</th>
+            <th>Akcje</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.PartnerID</td>
+                <td>@Html.ActionLink(item.Name, "EditPartner", new { item.PartnerID })</td>
+                <td>
+                    @using (Html.BeginForm("DeletePartner", "Admin"))
+                    {
+                        @Html.Hidden("PartnerID", item.PartnerID)
+                        <input type="submit" value="Usuń partnera" />
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
+<div class="panel-footer">
+    @Html.ActionLink("Dodaj nowego partnera", "CreatePartner", null,
+    new { @class = "btn btn-default" })
+</div>
+
+
+

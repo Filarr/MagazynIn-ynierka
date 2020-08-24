@@ -1,0 +1,80 @@
+﻿@model IEnumerable<string>
+
+
+
+
+<head>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" integrity="sha384-REHJTs1r2ErKBuJB0fCK99gCYsVjwxHrSU0N7I1zl9vZbggVJXRMsv/sLlOAGb4M" crossorigin="anonymous">
+    <style>
+        .cssmenu {
+            width: 100%;
+            border-right-width: 6px;
+            border-right-style: solid;
+            border-right-color: black;
+            border-left-width: 6px;
+            border-left-style: solid;
+            border-left-color: black;
+            
+        }
+
+        ul2 {
+            padding: 0;
+            margin: 0;
+        }
+
+            ul2 li2 a {
+                display: block;
+                padding: 5px 15px;
+                color: white;
+                background-color: forestgreen;
+                border-top: 1px solid #999;
+                text-decoration: solid;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            }
+
+            ul2 li2:first-child {
+                border: none;
+            }
+
+            ul2 li2 a:hover {
+                color: white;
+            }
+
+        li3 {
+            display: block;
+            padding: 5px 15px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            font-style: italic;
+            font-size: 18px;
+            background-color: black;
+            border-top: 1px solid black;
+            text-decoration: solid;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<div class="cssmenu">
+    <ul2>
+        <li3>KATEGORIE</li3>
+        @foreach (var link in Model)
+        {
+            <li2>
+
+                @Html.RouteLink(link, new {
+                   controller = "Product",
+                   action = "List",
+                   category = link,
+                   page = 1 }
+           )
+
+            </li2>
+
+        }
+    </ul2>
+    <li3>PARTNERZY</li3>
+</div>

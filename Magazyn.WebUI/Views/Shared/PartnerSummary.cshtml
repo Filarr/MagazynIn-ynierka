@@ -1,0 +1,44 @@
+﻿@model Magazyn.Domain.Entities.Partner
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
+    <link href="~/Content/ErrorStyles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" integrity="sha384-REHJTs1r2ErKBuJB0fCK99gCYsVjwxHrSU0N7I1zl9vZbggVJXRMsv/sLlOAGb4M" crossorigin="anonymous">
+    <title>@ViewBag.Title</title>
+    <style>
+        .abc {
+            background-color: forestgreen;
+            text-transform: uppercase;
+            color: white;
+            text-decoration: solid;
+            letter-spacing: 2px;
+            font-weight: bold;
+            padding-top: 5px;
+            padding-bottom: -5px;
+            border-right-width: 6px;
+            border-right-style: solid;
+            border-right-color: black;
+            border-left-width: 6px;
+            border-left-style: solid;
+            border-left-color: black;
+        }
+       
+    </style>
+</head>
+
+<div class="abc">
+    @if (Model.PartnerImageData != null)
+    {
+        <center>
+            <img class="img-thumbnail" width="125" height="100"
+                 src="@Url.Action("PartnerGetImage", "Product", new { Model.PartnerID }) " />
+
+            <br />
+            @Model.Name
+            <br /><br />
+        </center>
+
+    }
+</div>

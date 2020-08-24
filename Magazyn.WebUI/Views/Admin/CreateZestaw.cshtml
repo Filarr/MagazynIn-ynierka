@@ -1,0 +1,72 @@
+﻿@model Magazyn.WebUI.Models.DodajProduktView
+
+@{
+    ViewBag.Title = "Administracja: edycja ";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
+    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+}
+
+
+<div class="panel">
+<h3>Tworzenie zestawu</h3>
+</div>
+
+
+
+    @using (Html.BeginForm("CreateZestaw", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-4" style="line-height: 26px;">
+                    <label>Nazwa zestawu:</label><br />
+                    @Html.TextBoxFor(x => x.zestaw.Name, new { @class = "form-control" })
+                    <label>Ilość:</label>
+                    @Html.TextBoxFor(x => x.product.Total, new { @Value = "0", @class = "form-control" })
+                    <label>Produkt 1:</label>
+                    @Html.TextBoxFor(x => x.zestaw.ProduktName1, new { @class = "form-control" })
+                    <label>Produkt 2:</label>
+                    @Html.TextBoxFor(x => x.zestaw.ProduktName2, new { @class = "form-control" })
+                    <label>Produkt 3:</label>
+                    @Html.TextBoxFor(x => x.zestaw.ProduktName3, new { @class = "form-control" })
+                    <label>Produkt 4:</label>
+                    @Html.TextBoxFor(x => x.zestaw.ProduktName4, new { @class = "form-control" })
+                    <label>Produkt 5:</label>
+                    @Html.TextBoxFor(x => x.zestaw.ProduktName5, new { @class = "form-control" })
+                </div>
+           </div>
+       <br />
+            <div class="panel-footer">
+                <input type="submit" value="Zapisz" class="btn btn-primary" />
+                @Html.ActionLink("Anuluj i wróć do listy", "Index", null, new
+           {
+               @class = "btn btn-default"
+           })
+      </div>
+     </div>
+    }
+        
+
+<h3>Lista produktów:</h3>
+
+        <div class="panel-body">
+            <table class="table table-striped table-condensed table-bordered">
+                <tr>
+                    <th>ID</th>
+                    <th>Nazwa</th>
+                    <th class="NumericCol">Cena</th>
+                    <th>Ilość - Razem</th>
+                    
+                </tr>
+
+                @foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td>@item.ProductID</td>
+                        <td>@item.Name</td>
+                        <td class="NumericCol">@item.Price.ToString("c")</td>
+                        <td>@item.Total.ToString()</td>
+                    </tr>
+                }
+            </table>
+        </div>

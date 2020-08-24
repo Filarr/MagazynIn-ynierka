@@ -1,0 +1,68 @@
+﻿@model Magazyn.Domain.Entities.Product
+
+@{
+    ViewBag.Title = "Administracja: ściąganie produktu : " + @Model.Name;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
+    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h3>Usuwanie towaru w @Model.Name</h3>
+    </div>
+    @using (Html.BeginForm("ŚciąganieProduktów", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="panel-body">
+            @Html.HiddenFor(m => m.ProductID)
+            @Html.HiddenFor(m => m.Category)
+            @Html.HiddenFor(m => m.Description)
+            @Html.HiddenFor(m => m.ImageData)
+            @Html.HiddenFor(m => m.ImageMimeType)
+            @Html.HiddenFor(m => m.Total)
+            @Html.HiddenFor(m => m.Price)
+
+
+
+            @foreach (var property in ViewData.ModelMetadata.Properties)
+            {
+                switch (property.PropertyName)
+                {
+                    case "ProductID":
+                    case "Category":
+                    case "Description":
+                    case "ImageData":
+                    case "Price":
+                    case "ImageMimeType":
+                    case "Total":
+
+                        // Brak operacji.
+                        break;
+                    default:
+                        <div class="form-group">
+                            <label>@(property.DisplayName ?? property.PropertyName)</label>
+                            @if (property.PropertyName == "Name")
+                            {
+                                @Html.TextBox(property.PropertyName, null, new { @class = "form-control" })
+                            }
+                            else
+                            {
+                                @Html.TextBox(property.PropertyName, null, new { @class = "form-control" })
+                            }
+                            @Html.ValidationMessage(property.PropertyName)
+                        </div>
+                        break;
+                }
+            }
+        </div>
+
+
+        <div class="panel-footer">
+            <input type="submit" value="Zapisz" class="btn btn-primary" />
+            @Html.ActionLink("Anuluj i wróć do listy", "Index", null, new
+            {
+           @class = "btn btn-default"
+            })
+        </div>
+    }
+</div>

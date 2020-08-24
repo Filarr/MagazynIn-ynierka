@@ -1,0 +1,19 @@
+﻿
+@model Magazyn.WebUI.Models.ProductListViewModel
+
+@{
+    ViewBag.Title = "Produkty";
+}
+
+@foreach (var p in Model.Products)
+{
+    @Html.Partial("ProductSummary", p);
+}
+
+<div class="btn-group pull-left" style="margin-bottom:5px;">
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", 
+    new { page = x, category = Model.CurrentCategory }))
+   
+</div>
+
+
