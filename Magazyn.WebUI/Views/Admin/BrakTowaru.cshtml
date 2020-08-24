@@ -1,0 +1,52 @@
+﻿@model Magazyn.WebUI.Models.BrakTowaruEmail
+
+@{
+    ViewBag.Title = "Administracja: zamowienie ";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
+    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+}
+
+<style>
+    <style>
+    .form-group {
+        width: 100%;
+    }
+    .container {
+        padding-top: 70px;
+        width: 30%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<div class="container">
+    <h3><b>Formularz do do dostawców</b></h3>
+    @using (Html.BeginForm())
+    {
+        <label class="alert-success">@ViewBag.Messages</label>
+        <div class="form-group">
+            <label>Nazwa produktu : </label>
+            <br />
+            @Html.TextBoxFor(x => x.Name,new { @class = "form-control" })
+        </div>
+
+        
+
+        <div class="form-group">
+            <label>Zapotrzebowanie:</label>
+            @Html.TextBoxFor(x => x.Ilość, new { @class = "form-control" })
+        </div>
+        <div class="lala">
+            <input type="submit" value="Wyślij" class="btn btn-primary" />
+            @Html.ActionLink("Anuluj", "Index", null, new
+            {
+           @class = "btn btn-default"
+            })
+        </div>
+
+    }
+</div>

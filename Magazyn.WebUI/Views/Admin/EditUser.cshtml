@@ -1,0 +1,51 @@
+﻿@model Magazyn.Domain.Entities.Login
+@{
+    ViewBag.Title = "Administracja: edycja " + @Model.User;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
+    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h3>Edycja @Model.Name</h3>
+    </div>
+    @using (Html.BeginForm("EditUser", "Admin"))
+    {
+        <div class="panel-body">
+            @Html.HiddenFor(m => m.LoginID)
+            @foreach (var property in ViewData.ModelMetadata.Properties)
+            {
+                if (property.PropertyName != "LoginID")
+                {
+            <div class="form-group">
+                <label>@(property.DisplayName ?? property.PropertyName)</label>
+                @if (property.PropertyName == "Admin" || property.PropertyName == "Activate")
+                {
+                    @Html.CheckBox(property.PropertyName, new { @class = "form-check-input" })
+                }
+                else
+                {
+                    @Html.TextBox(property.PropertyName, null, new { @class = "form-control" })
+                }
+                @Html.ValidationMessage(property.PropertyName)
+
+            </div>
+                        
+                }
+            }
+            
+        </div>
+
+
+
+        <div class="panel-footer">
+            <input type="submit" value="Zapisz" class="btn btn-primary" />
+            @Html.ActionLink("Anuluj i wróć do listy", "DaneUżytkowników", null, new
+            {
+           @class = "btn btn-default"
+            })
+        </div>
+    }
+</div>
+

@@ -1,0 +1,17 @@
+﻿@model Magazyn.Domain.Entities.ShippingDetails
+
+@{
+    ViewBag.Title = "Magazyn: Dane zamówienia";
+}
+
+<h2>Rezerwacja</h2>
+<p>Proszę podać swoje dane, a towar zostanie zarezerwowany!</p>
+
+@Html.ValidationSummary()
+
+@using (Html.BeginForm())
+{
+<div class="text-center">
+    <input class="btn btn-primary" type="submit" value="Zakończ rezerwacje" />
+</div>
+}

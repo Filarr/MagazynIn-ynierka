@@ -1,0 +1,120 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
+    <link href="~/Content/ErrorStyles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" integrity="sha384-REHJTs1r2ErKBuJB0fCK99gCYsVjwxHrSU0N7I1zl9vZbggVJXRMsv/sLlOAGb4M" crossorigin="anonymous">
+    <title>@ViewBag.Title</title>
+    <style>
+
+        .menu-bar {
+            background: black;
+            text-align: center;
+            font-size: 15px;
+            text-transform: uppercase;
+            padding-top: 10px;
+        }
+
+            .menu-bar ul {
+                display: inline-flex;
+                list-style: none;
+                color: #fff;
+            }
+
+                .menu-bar ul li {
+                    width: 230px;
+                    margin: 3px;
+                    padding: 1px;
+                }
+
+                    .menu-bar ul li a {
+                        text-decoration: none;
+                        color: #fff;
+                    }
+
+                    .active, .menu-bar ul li:hover {
+                        background: #2bab0d;
+                        border-radius: 3px;
+                    }
+
+            .menu-bar .fa {
+                margin-right: 7px;
+            }
+
+
+        .stopka {
+            width: 20%;
+            height: 80px;
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            background: rgba(20, 23, 20, 0.95);
+            font-size: 16px;
+            border-top-width: 6px;
+            border-top-style: solid;
+            border-top-color: forestgreen;
+            border-left-width: 6px;
+            border-left-style: solid;
+            border-left-color: forestgreen;
+            color: white;
+        }
+
+        .baner {
+            background-image: url(../Content/image/baner.png);
+            width: 100%;
+            max-width: 100%;
+            height: 100px;
+            border-bottom-width: 3px;
+            border-bottom-style: solid;
+            border-bottom-color: forestgreen;
+        }
+
+        .row {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="baner">
+
+    </div>
+    <div class="menu-bar" role="navigation">
+        <ul>
+            <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Wszystkie Produkty", "List")</li>
+            <li><i class="fa fa-address-book"></i>@Html.ActionLink("Twoje Zamówienia", "TwojeZamowienia")</li>
+            <li><i class="fa fa-calendar"></i>@Html.ActionLink("Zapytanie", "Formularz")</li>
+            <li><i class="fa fa-home"></i>@Html.ActionLink("Wyloguj", "../Account/Login")</li>
+        </ul>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-2">
+            @Html.Action("Menu", "Nav")
+
+            @Html.Action("ListaPartnerow","Product")
+              
+            
+        </div>
+
+        <div class="col-lg-10">
+            @if (Session["userID"] == null)
+            {
+                Response.Redirect("~/Account/Login");
+            }
+            @RenderBody()
+        </div>
+    </div>
+
+
+
+    <div class="stopka" role="navigation">
+        @Html.Action("Summary", "Cart")
+    </div>
+
+</body>
+</html>

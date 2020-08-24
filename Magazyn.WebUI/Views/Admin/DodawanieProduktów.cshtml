@@ -1,0 +1,59 @@
+﻿@model Magazyn.WebUI.Models.DodajProduktView
+
+@{
+    ViewBag.Title = "Administracja: dodawanie produktu : " + @Model.product.Name;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
+    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h3>Dodawanie towaru w  @Model.product.Name</h3>
+    </div>
+    @using (Html.BeginForm("DodawanieProduktów", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-4" style="line-height: 26px;">
+                <label>Nazwa produktu:</label><br />
+                @Html.TextBoxFor(x => x.product.Name, new { @class = "form-control" })
+                <label>Ilość:</label>
+                @Html.TextBoxFor(x => x.product.Total, new { @Value = "0", @class = "form-control" })
+                <label>Cena zakupu za sztukę</label>
+                @Html.TextBoxFor(x => x.przychodZewnetrzny.Cena, new { @Value = "0", @class = "form-control" })
+                <label>Miejsce dostawy (Magazyn 1 / Magazyn 2):</label>
+                @Html.TextBoxFor(x => x.przychodZewnetrzny.Magazyn, new { @class = "form-control" })
+                <h3>Dane dostawcy:</h3>
+                <label>Nazwa firmy</label>
+                @Html.TextBoxFor(x => x.przychodZewnetrzny.Kontrahent, new { @class = "form-control" })
+                <label>Adres:</label>
+                @Html.TextBoxFor(x => x.przychodZewnetrzny.Adres, new { @class = "form-control" })
+                <label>Miasto:</label>
+                @Html.TextBoxFor(x => x.przychodZewnetrzny.Miasto, new { @class = "form-control" })
+                <label>Kod pocztowy:</label>
+                @Html.TextBoxFor(x => x.przychodZewnetrzny.KodPocztowy, new { @class = "form-control" })
+            </div>
+        </div>
+        
+                
+                
+                
+                
+          
+
+        
+
+
+
+
+
+        <div class="panel-footer">
+            <input type="submit" value="Zapisz" class="btn btn-primary" />
+            @Html.ActionLink("Anuluj i wróć do listy", "Index", null, new
+       {
+           @class = "btn btn-default"
+       })
+        </div>
+    </div>
+    }

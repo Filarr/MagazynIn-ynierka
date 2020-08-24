@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Magazyn.Domain.Entities.Order>
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Twoje zamówienia</h2>
+
+<div class="panel-body">
+    <table class="table table-striped table-condensed table-bordered">
+        <tr>
+            <th>Kwota Całkowita</th>
+            <th>Zakończone?</th>
+            <th>Kompletne?</th>
+            <th>Data zamówienia</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            
+            if (item.LoginID == (int) Session["userID"])
+            {
+            <tr>
+                <td>@item.Amount</td>
+                <td>@item.Ended</td>
+                <td>@item.Complete</td>
+                <td>@item.Data</td>
+            </tr>
+
+
+            }
+
+        }
+    </table>
+</div>
+
+

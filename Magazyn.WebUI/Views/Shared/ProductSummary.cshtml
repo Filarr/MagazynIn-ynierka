@@ -1,0 +1,35 @@
+﻿@model Magazyn.Domain.Entities.Product
+
+<div class="well" style="min-height:150px; margin-top:10px;">
+
+    @if (Model.ImageData != null)
+    {<div class="pull-left" style="margin-right: 10px">            
+    <img class="img-thumbnail" width="75" height="75" 
+         src="@Url.Action("GetImage", "Product", new { Model.ProductID })" />        
+    </div>
+    }
+
+     <h4>
+         <strong>@Model.Name</strong>  
+         
+             <span class="pull-right label label-primary">
+                 @Model.Price.ToString("c")
+             </span>
+     </h4>
+
+        @using (Html.BeginForm("AddToCart", "Cart"))
+        {
+            <div class="pull-right">
+                @Html.HiddenFor(x => x.ProductID)
+                @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                <input type="submit" class="btn btn-success" value="Dodaj do koszyka" />
+            </div>
+        }
+        <span class="lead"  style="font-size:16px;">@Model.Description</span>
+    <br />
+        <span class="pull-right" style=" font-size:16px; margin-right: 2cm; border-bottom: 3px double green; ">
+
+             <strong>Aktualna dostępność towaru : </strong>  <i>Magazyn 1 -</i>  @Model.Warehouse1 ,  <i>Magazyn 2 -</i>  @Model.Warehouse2
+        </span>
+    </div>
+

@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Magazyn.Domain.Entities.Order>
+
+@{
+    ViewBag.Title = "Zamowienia";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="C:\Users\Mateusz Kłos\source\repos\MagazynInżynierka\Magazyn.Domain\Scripts\jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: sans-serif;
+    }
+
+    input[type=button], input[type=submit], input[type=reset] {
+        background-color: #4CAF50;
+        border-radius: 3px;
+        border-color: black;
+        color: white;
+        padding: 6px 6px;
+        text-decoration: none;
+        margin: 2px 2px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    .menu-bar {
+        background: rgba(20, 23, 20, 0.95);
+        text-align: center;
+        font-size: 16px;
+        border-bottom-width: 6px;
+        border-bottom-style: solid;
+        border-bottom-color: forestgreen;
+    }
+
+        .menu-bar ul {
+            display: inline-flex;
+            list-style: none;
+            color: #fff;
+        }
+
+            .menu-bar ul li {
+                width: 170px;
+                margin: 4px;
+                padding: 1px;
+            }
+
+                .menu-bar ul li a {
+                    text-decoration: none;
+                    color: #fff;
+                }
+
+                .active, .menu-bar ul li:hover {
+                    background: #2bab0d;
+                    border-radius: 3px;
+                }
+
+        .menu-bar .fa {
+            margin-right: 7px;
+        }
+</style>
+
+<<div class="menu-bar" role="navigation">
+    <ul>
+        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Produkty", "Index")</a></li>
+        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Partnerzy", "Partner")</a></li>
+        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Zestawy", "Zestaw")</a></li>
+        <li><i class="fa fa-users"></i>@Html.ActionLink("Użytkownicy", "DaneUżytkowników")</a></li>
+        <li><i class="fa fa-address-book"></i>@Html.ActionLink("Zamówienia", "Zamowienia")</a></li>
+        <li><i class="fa fa-calendar"></i> @Html.ActionLink("Operacje", "Magazyn")</a></li>
+    </ul>
+    <ul>
+        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty MM", "MM")</a></li>
+        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty PW", "PW")</a></li>
+        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty PZ", "PZ")</a></li>
+        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty RW", "RW")</a></li>
+        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty RZ", "RZ")</a></li>
+        <li><i class="fa fa fa-home"></i>@Html.ActionLink("Wyloguj", "../Account/Login")</a></li>
+    </ul>
+</div>
+
+
+
+         <div class="panel-body">
+        <table class="table table-striped table-condensed table-bordered" id="tblExample">
+            <tr>
+                <th>Numer zamówienia</th>
+                <th>ID Użytkownika</th>
+                <th>Kwota Całkowita</th>
+                <th>Zakończone?</th>
+                <th>Kompletne?</th>
+                <th>Data zamówienia</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@item.OrderID</td>
+                <td>@item.LoginID</td>
+                <td>@item.Amount</td>
+                <td>@item.Ended</td>
+                <td>@item.Complete</td>
+                <td>@item.Data</td>
+                <td>
+                    @if (@item.Complete == false)
+                    {
+                        using (Html.BeginForm("Braki", "Admin", new { item.OrderID }))
+                        {
+                            <input type="submit" value="Uzupełnij" />
+                        }
+                    }
+                    @if (@item.Ended == false)
+                    {
+                        using (Html.BeginForm("ZakonczZamowienie", "Admin", new { item.OrderID }))
+                        {
+                            <input type="submit" value="Zakończ zamówienie" />
+                        }
+                    }
+                </td>
+            </tr>
+            }
+        </table>
+    </div>
+    <div class="panel-footer">
+        @Html.ActionLink("Wydrukuj liste zamówień", "PrintAlll", null,
+        new { @class = "btn btn-default" })
+       
+    </div>
+

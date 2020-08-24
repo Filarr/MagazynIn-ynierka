@@ -1,0 +1,29 @@
+﻿
+@{
+    Layout = null;
+}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="panel-body">
+    <table class="table table-striped table-condensed table-bordered">
+        Spis Towarów na @DateTime.Now
+        <tr>
+            <th>Nazwa</th>
+            <th class="NumericCol">Cena</th>
+            <th>Ilość - Razem</th>
+            <th>Magazyn 1</th>
+            <th>Magazyn 2</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td class="NumericCol">@item.Price.ToString("c")</td>
+                <td>@item.Total.ToString()</td>
+                <td>@item.Warehouse1.ToString()</td>
+                <td>@item.Warehouse2.ToString()</td>
+            </tr>
+        }
+    </table>
+</div>
