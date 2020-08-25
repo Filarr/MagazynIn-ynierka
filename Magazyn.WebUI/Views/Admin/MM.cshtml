@@ -116,6 +116,7 @@
             <th>Mag_Przyj</th>
             <th>Produkt</th>
             <th>Ilość</th>
+            <th>Akcje</th>
         </tr>
 
         @foreach (var item in Model)
@@ -130,6 +131,12 @@
             <td>@item.MagazynPrzyjmujacy</td>
             <td>@item.NazwaProduktu</td>
             <td>@item.Ilosc</td>
+            <td>
+                @using (Html.BeginForm("DokumentyDrukujMM", "Admin", new { item.MMID }))
+                {
+                    <input type="submit" value="Wydrukuj dokumenty" />
+                }
+            </td>
         </tr>
         }
     </table>

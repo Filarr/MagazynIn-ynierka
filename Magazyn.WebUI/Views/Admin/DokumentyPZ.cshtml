@@ -1,0 +1,72 @@
+﻿@model Magazyn.Domain.Entities.PZ
+
+@{
+    ViewBag.Title = "Administracja: generowanie raportów ";
+    Layout = "~/Views/Shared/_Dokumenty.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
+    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+}
+<style>
+    .body {
+        font-size: 14px;
+        font-family: 'Courier New';
+    }
+</style>
+<br /><br />
+<p align="right">
+    Data wystawienia dokumentu : @Model.DataWystawienia
+</p>
+<br />
+<br />
+<p align="left">
+    <strong>Dane kontrahenta:</strong>  <br />
+    @Model.Kontrahent<br />
+    @Model.Adres<br />
+    @Model.KodPocztowy @Model.Miasto <br />
+    <br />
+</p>
+<p align="right">
+    <strong>Dane firmy :</strong>
+    <br />@Model.Magazyn
+    <br />ul. Koronowska 2
+    <br />85-105 Bydgoszcz
+</p>
+<br />
+<center>
+    <strong>
+        <h3>
+            DOKUMENT PZ
+            <br />@Model.PZID/@Model.Miesiac/@Model.Rok
+        </h3>
+    </strong>
+</center>
+<br />
+<table class="table table-bordered">
+    <tr>
+        <th>Nazwa Towaru</th>
+        <th>Ilość</th>
+        <th>Cena za sztukę</th>
+    </tr>
+    <tr>
+        <td>@Model.Produkt</td>
+        <td>@Model.Ilosc</td>
+        <td>@Model.Cena zł</td>
+    </tr>
+</table>
+<p align="right"><strong>CENA CAŁKOWITA : @Model.CenaCalkowita zł</strong></p>
+
+<br />
+<br />
+<br />
+<p align="left"><strong><i>Podpis dostawcy</i></strong></p>
+<br />
+<br />
+<br />
+<br />
+<p align="right">
+    <strong><i>Podpis osoby upoważnionej do wystawienia PZ</i></strong><br />
+    @Model.Wystawiajacy
+</p>
+
+
+

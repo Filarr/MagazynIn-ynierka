@@ -113,23 +113,27 @@
             <th>Wystaw</th>
             <th>Kupujący</th>
             <th>Dokumenty</th>
+            <th>Akcje</th>
         </tr>
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.RZID</td>
-                <td>@item.Miesiac</td>
-                <td>@item.Rok</td>
-                <td>@item.Produkty</td>
-                <td>@item.DataSprzedazy</td>
-                <td>@item.CenaCalkowita</td>
-                <td>@item.Wystawiajacy</td>
-                <td>@item.Kupujacy</td>
-                <td>
-                 
-                </td>
-            </tr>
+        <tr>
+            <td>@item.RZID</td>
+            <td>@item.Miesiac</td>
+            <td>@item.Rok</td>
+            <td>@item.Produkty</td>
+            <td>@item.DataSprzedazy</td>
+            <td>@item.CenaCalkowita</td>
+            <td>@item.Wystawiajacy</td>
+            <td>@item.Kupujacy</td>
+            <td>
+            <td>
+                @Html.ActionLink("Wydrukuj dokument", "PrintAl", null,
+                new {@class = "btn btn-default" } )
+            </td>
+            </td>
+        </tr>
         }
     </table>
 

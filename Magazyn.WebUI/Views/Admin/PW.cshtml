@@ -109,10 +109,12 @@
             <th>Miesiąc</th>
             <th>Rok</th>
             <th>Data Wys</th>
+            <th>Produkt</th>
             <th>Ilosc</th>
             <th>Cena Całk</th>
             <th>Wystaw</th>
             <th>Magazyn</th>
+            <th>Akcje</th>
         </tr>
 
         @foreach (var item in Model)
@@ -122,10 +124,16 @@
             <td>@item.Miesiac</td>
             <td>@item.Rok</td>
             <td>@item.DataWystawienia</td>
+            <td>@item.Produkt</td>
             <td>@item.Ilosc</td>
             <td>@item.CenaCalkowita</td>
             <td>@item.Wystawiajacy</td>
             <td>@item.Magazyn</td>
+            <td>
+                @Html.ActionLink("Wydrukuj dokument", "PrintAl", null,
+                new {@class = "btn btn-default" } )
+            </td>
+            
         </tr>
         }
     </table>

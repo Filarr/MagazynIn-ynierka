@@ -1,0 +1,67 @@
+﻿@model Magazyn.Domain.Entities.MM
+
+@{
+    ViewBag.Title = "Administracja: generowanie raportów ";
+    Layout = "~/Views/Shared/_Dokumenty.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
+    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+}
+<style>
+    .body {
+        font-size: 14px;
+        font-family: 'Courier New';
+    }
+</style>
+<br /><br />
+<p align="right">
+    Data wystawienia dokumentu : @Model.DataWystawienia
+</p>
+<br />
+<br />
+
+</p>
+<p align="right">
+    <strong>Dane firmy :</strong>
+    <br />@Model.MagazynPrzyjmujacy
+    <br />ul. Koronowska 2
+    <br />85-105 Bydgoszcz
+</p>
+<br />
+<center>
+    <strong>
+        <h3>
+            DOKUMENT MM
+            <br />@Model.MMID/@Model.Miesiac/@Model.Rok
+        </h3>
+    </strong>
+</center>
+<br />
+<table class="table table-bordered">
+    <tr>
+        <th>Nazwa Produktu</th>
+        <th>Ilość</th>
+        <th>Magazyn Wydający</th>
+        <th>Magazyn Przyjmujący</th>
+    </tr>
+    <tr>
+        <td>@Model.NazwaProduktu</td>
+        <td>@Model.Ilosc</td>
+        <td>@Model.MagazynWydajacy</td>
+        <td>@Model.MagazynPrzyjmujacy</td>
+    </tr>
+</table>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<p align="right">
+    <strong><i>Podpis osoby upoważnionej do wystawienia MM</i></strong><br />
+    @Model.Wystawiajacy
+</p>
+
+
+
+

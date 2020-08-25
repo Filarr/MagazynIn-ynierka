@@ -118,58 +118,38 @@ namespace Magazyn.WebUI.Controllers
             return q;
         }
 
-        public ActionResult DokumentyDrukuj(int saleId)
+        public ActionResult DokumentyDrukujPZ(int PZId)
         {
-            Sale sale = repository4.Sales
-                .FirstOrDefault(p => p.SaleID == saleId);
+            PZ abc = repository9.PZs
+                .FirstOrDefault(p => p.PZID == PZId);
 
-            string a = sale.BuySell;
-
-            if(sale.Complete==false)
-            {
-              return new ActionAsPdf("Dokumenty", sale) { FileName = "WZ_oczekujace.pdf" };
-            }
-            else if(a.Equals("Buy       "))
-            {
-             return new ActionAsPdf("Dokumenty3", sale) { FileName = "PZ.pdf" };
-            }else if(a.Equals("Sell      "))
-            {
-                return new ActionAsPdf("Dokumenty2", sale) { FileName = "WZ.pdf" };
-            }
-            else
-            {
-                return new ActionAsPdf("Dokumenty4", sale) { FileName = "RW.pdf" };
-            }
+             return new ActionAsPdf("DokumentyPZ", abc) { FileName = "PZ.pdf" };
             
         }
-
-        public ViewResult Dokumenty(int saleId)
+        public ActionResult DokumentyDrukujMM(int MMId)
         {
-            Sale sale = repository4.Sales
-                .FirstOrDefault(p => p.SaleID == saleId);
-            return View(sale);
+            MM abc = repository7.MMs
+                .FirstOrDefault(p => p.MMID == MMId);
+
+            return new ActionAsPdf("DokumentyMM", abc) { FileName = "MM.pdf" };
+
         }
 
-        public ViewResult Dokumenty2(int saleId)
+        public ViewResult DokumentyMM(int MMId)
         {
-            Sale sale = repository4.Sales
-                .FirstOrDefault(p => p.SaleID == saleId);
-            return View(sale);
+            MM abc = repository7.MMs
+                .FirstOrDefault(p => p.MMID == MMId);
+            return View(abc);
         }
 
-        public ViewResult Dokumenty3(int saleId)
+
+        public ViewResult DokumentyPZ(int PZId)
         {
-            Sale sale = repository4.Sales
-                .FirstOrDefault(p => p.SaleID == saleId);
-            return View(sale);
+            PZ abc = repository9.PZs
+               .FirstOrDefault(p => p.PZID == PZId);
+            return View(abc);
         }
 
-        public ViewResult Dokumenty4(int saleId)
-        {
-            Sale sale = repository4.Sales
-                .FirstOrDefault(p => p.SaleID == saleId);
-            return View(sale);
-        }
 
         public ViewResult Magazyn()
         {
@@ -386,6 +366,7 @@ namespace Magazyn.WebUI.Controllers
                 rozchodwewnetrzny.CenaCalkowita += product1.Price * dodaj.product.Total;
                 rozchodwewnetrzny.Produkty += product1.Name + "\t" + product1.Price + "\n";
                 product.Description += product1.Name + ",";
+                repository.SaveProduct(product1);
             }
 
            if(product2 != null)
@@ -412,6 +393,7 @@ namespace Magazyn.WebUI.Controllers
                     rozchodwewnetrzny.CenaCalkowita += product2.Price * dodaj.product.Total;
                     rozchodwewnetrzny.Produkty += product2.Name + "\t" + product2.Price + "\n";
                     product.Description += product2.Name + ",";
+                    repository.SaveProduct(product2);
                 }
 
             }
@@ -440,6 +422,7 @@ namespace Magazyn.WebUI.Controllers
                     rozchodwewnetrzny.CenaCalkowita += product3.Price * dodaj.product.Total;
                     rozchodwewnetrzny.Produkty += product3.Name + "\t" + product3.Price +"\n";
                     product.Description += product3.Name + ",";
+                    repository.SaveProduct(product3);
                 }
 
             }
@@ -468,6 +451,7 @@ namespace Magazyn.WebUI.Controllers
                     rozchodwewnetrzny.CenaCalkowita += product4.Price * dodaj.product.Total;
                     rozchodwewnetrzny.Produkty += product4.Name + "\t" + product4.Price + "\n";
                     product.Description += product4.Name + ",";
+                    repository.SaveProduct(product4);
                 }
 
             }
@@ -496,6 +480,7 @@ namespace Magazyn.WebUI.Controllers
                     rozchodwewnetrzny.CenaCalkowita += product5.Price * dodaj.product.Total;
                     rozchodwewnetrzny.Produkty += product5.Name + "\t" + product5.Price + "\n";
                     product.Description += product5.Name + ",";
+                    repository.SaveProduct(product5);
                 }
 
             }
@@ -505,11 +490,8 @@ namespace Magazyn.WebUI.Controllers
             zestaw.Cena = product.Price;
 
             repository.SaveProduct(product);
-            repository.SaveProduct(product1);
-            repository.SaveProduct(product2);
-            repository.SaveProduct(product3);
-            repository.SaveProduct(product4);
-            repository.SaveProduct(product5);
+            
+            
 
             zestaw.ProductID = product.ProductID;
             repository8.SavePW(przychodwewmetrzny);
@@ -708,6 +690,7 @@ namespace Magazyn.WebUI.Controllers
                 email.Name = formula.Name;
                 email.Ilość = formula.Ilość;
                 email.Kontrahent = formula.Kontrahent;
+                email.email = formula.email;
                 email.Send();
 
                 ViewBag.Messages = "Wysłano Formularz";

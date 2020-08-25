@@ -18,6 +18,19 @@
         font-family: sans-serif;
     }
 
+    .delete, .blank {
+        background-color: #4CAF50;
+        border: solid 2px;
+        border-color: black;
+        color: white;
+        padding: 6px 6px;
+        padding-bottom: 5px;
+        text-decoration: none;
+        margin: 5px 2px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
     input[type=button], input[type=submit], input[type=reset] {
         background-color: #4CAF50;
         border-radius: 3px;
@@ -37,6 +50,9 @@
         border-bottom-width: 6px;
         border-bottom-style: solid;
         border-bottom-color: forestgreen;
+        border-top-width: 6px;
+        border-top-style: solid;
+        border-top-color: forestgreen;
     }
 
         .menu-bar ul {
@@ -66,7 +82,7 @@
         }
 </style>
 
-<<div class="menu-bar" role="navigation">
+<div class="menu-bar" role="navigation">
     <ul>
         <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Produkty", "Index")</a></li>
         <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Partnerzy", "Partner")</a></li>

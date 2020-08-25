@@ -113,21 +113,28 @@
             <th>Kontrahent</th>
             <th>Wystaw</th>
             <th>Magazyn</th>
+            <th>Akcje:</th>
         </tr>
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.PZID</td>
-                <td>@item.Miesiac</td>
-                <td>@item.Rok</td>
-                <td>@item.Produkt</td>
-                <td>@item.DataWystawienia</td>
-                <td>@item.CenaCalkowita</td>
-                <td>@item.Kontrahent</td>
-                <td>@item.Wystawiajacy</td>
-                <td>@item.Magazyn</td>
-            </tr>
+        <tr>
+            <td>@item.PZID</td>
+            <td>@item.Miesiac</td>
+            <td>@item.Rok</td>
+            <td>@item.Produkt</td>
+            <td>@item.DataWystawienia</td>
+            <td>@item.CenaCalkowita</td>
+            <td>@item.Kontrahent</td>
+            <td>@item.Wystawiajacy</td>
+            <td>@item.Magazyn</td>
+            <td>
+                @using (Html.BeginForm("DokumentyDrukujPZ", "Admin", new { item.PZID }))
+                {
+                <input type="submit" value="Wydrukuj dokumenty" />
+                }
+            </td>
+        </tr>
         }
     </table>
 
