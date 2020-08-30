@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Magazyn.Domain.Entities;
 
-
 namespace Magazyn.Domain.Abstract
 {
-    public interface IOrderRepository
+    public interface IKontrahentRepository
     {
-        IEnumerable<Order> Orders { get; }
+        IEnumerable<Kontrahent> Kontrahents { get; }
 
-        void SaveOrder(Order order);
+        void SaveKontrahent(Kontrahent kontrahent);
 
+        Kontrahent DeleteKontrahent(int kontrahentID);
     }
 }

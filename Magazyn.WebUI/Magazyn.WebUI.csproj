@@ -183,13 +183,14 @@
     <Compile Include="Infrastructure\Binders\CartModelBinder.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\BrakTowaruEmail.cs" />
+    <Compile Include="Models\BrakTowaruMix.cs" />
     <Compile Include="Models\CartIndexViewModel.cs" />
     <Compile Include="Models\DodajProduktView.cs" />
     <Compile Include="Models\FormularzEmail.cs" />
     <Compile Include="Models\LoginListViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\PagingInfo.cs" />
-    <Compile Include="Models\PartnerListViewModel.cs" />
+    <Compile Include="Models\KontrahentListViewModel.cs" />
     <Compile Include="Models\ProductListViewModel.cs" />
     <Compile Include="Models\RachunkiUserModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
@@ -235,14 +236,11 @@
     <Content Include="Views\Admin\Index2.cshtml" />
     <Content Include="Views\Admin\DodawanieProduktów.cshtml" />
     <Content Include="Views\Admin\ŚciąganieProduktów.cshtml" />
-    <Content Include="Views\Admin\PrzesuniecieMagazynowe.cshtml" />
     <Content Include="Views\Admin\DokumentyPZ.cshtml" />
-    <Content Include="Views\Admin\Partner.cshtml" />
-    <Content Include="Views\Admin\EditPartner.cshtml" />
-    <Content Include="Views\Product\ListaPartnerow.cshtml" />
-    <Content Include="Views\Shared\PartnerSummary.cshtml" />
-    <Content Include="Views\Admin\EditContractor.cshtml" />
-    <Content Include="Views\Admin\MM.cshtml" />
+    <Content Include="Views\Admin\Kontrahent.cshtml" />
+    <Content Include="Views\Admin\EditKontrahent.cshtml" />
+    <Content Include="Views\Product\ListaKontrahentow.cshtml" />
+    <Content Include="Views\Shared\KontrahentSummary.cshtml" />
     <Content Include="Views\Admin\PW.cshtml" />
     <Content Include="Views\Admin\PZ.cshtml" />
     <Content Include="Views\Admin\RW.cshtml" />
@@ -250,7 +248,8 @@
     <Content Include="Views\Admin\Zestaw.cshtml" />
     <Content Include="Views\Admin\CreateZestaw.cshtml" />
     <Content Include="Views\Shared\_Dokumenty.cshtml" />
-    <Content Include="Views\Admin\DokumentyMM.cshtml" />
+    <Content Include="Views\Admin\Kategorie.cshtml" />
+    <Content Include="Views\Admin\EditKategorie.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -264,8 +263,6 @@
     <Folder Include="Infrastructure\Abstract\" />
     <Folder Include="Infrastructure\Concrete\" />
     <Folder Include="Reports\" />
-    <Folder Include="Views\DodajProduktView\" />
-    <Folder Include="Views\OrderReport\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Magazyn.Domain\Magazyn.Domain.csproj">

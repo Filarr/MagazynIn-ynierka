@@ -14,10 +14,10 @@ namespace Magazyn.WebUI.Controllers
     {
         private IProductRepository repository;
         private IOrderProcessor orderProcessor;
-        private IOrderRepository repository2;
-        private ISaleRepository repository3;
+        private IZamowienieRepository repository2;
+        private IRezerwacjeRepository repository3;
 
-        public CartController(IProductRepository repo, IOrderProcessor proc, IOrderRepository repo2, ISaleRepository repo3)
+        public CartController(IProductRepository repo, IOrderProcessor proc, IZamowienieRepository repo2, IRezerwacjeRepository repo3)
         {
             repository = repo;
             orderProcessor = proc;
@@ -73,64 +73,62 @@ namespace Magazyn.WebUI.Controllers
         [HttpPost]
         public ViewResult Checkout(Cart cart, ShippingDetails shippingDetails)
         {
-            Order order = new Order();
-            
+            Zamowienie order = new Zamowienie();
+
             DateTime localdate = DateTime.Now;
             decimal kwota = cart.ComputeTotalValue();
-            
 
-            if (cart.Lines.Count() == 0) {
+
+            if (cart.Lines.Count() == 0)
+            {
                 ModelState.AddModelError("", "Koszyk jest pusty!");
             }
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 orderProcessor.ProcessOrder(cart, shippingDetails);
-                order.LoginID = (int) Session["userID"];
+                order.LoginID = (int)Session["userID"];
                 order.Data = localdate;
-                order.Amount = kwota;
+                order.Cena = kwota;
                 order.Complete = true;
                 order.Ended = false;
 
-                repository2.SaveOrder(order);
+                repository2.SaveZamowienie(order);
 
 
 
                 foreach (var line in cart.Lines)
                 {
-                    Order orderek = repository2.Orders
+                    Zamowienie orderek = repository2.Zamowienies
                         .FirstOrDefault(o => o.Data == order.Data);
 
 
-                    Sale sale = new Sale();
-                    sale.BuySell = "Sell";
-                    sale.Data = localdate;
-                    sale.LoginID = (int)Session["userID"];
-                    sale.Price = line.Product.Price;
-                    sale.Quantity = line.Quantity;
-                    sale.OrderID = orderek.OrderID;
-                    sale.TotalAmount = line.Quantity * line.Product.Price;
+                    Rezerwacje sale = new Rezerwacje();
+
+                    sale.Cena = line.Product.Price;
+                    sale.Ilosc = line.Quantity;
+                    sale.ZamowienieID = orderek.ZamowienieID;
                     sale.ProductID = line.Product.ProductID;
-                    sale.ProductName = line.Product.Name;
                     sale.Complete = true;
-                   
-                    
+
+
                     Product product = repository.Products
                     .FirstOrDefault(p => p.ProductID == line.Product.ProductID);
                     int a = line.Quantity;
-                   
-                    if(a > product.Total)
+
+                    if (a > product.Total)
                     {
-                       
-                      
+
+
                         orderek.Complete = false;
                         sale.Complete = false;
 
-                        repository2.SaveOrder(orderek);
-                        repository3.SaveSale(sale);
+                        repository2.SaveZamowienie(orderek);
+                        repository3.SaveRezerwacje(sale);
                     }
                     else
                     {
                         product.Total = product.Total - a;
-                        if(a > product.Warehouse1)
+                        if (a > product.Warehouse1)
                         {
                             a = a - product.Warehouse1;
                             product.Warehouse1 = 0;
@@ -142,17 +140,19 @@ namespace Magazyn.WebUI.Controllers
                             product.Warehouse1 = product.Warehouse1 - a;
                             a = 0;
                         }
-                        
+
                         repository.SaveTotal(product);
-                        repository3.SaveSale(sale);
+                        repository3.SaveRezerwacje(sale);
                     }
                 }
 
-               
-            
+
+
                 cart.Clear();
                 return View("Completed");
-            } else {
+            }
+            else
+            {
                 return View(shippingDetails);
             }
 
@@ -163,4 +163,3 @@ namespace Magazyn.WebUI.Controllers
 
 
 
-    

@@ -27,16 +27,19 @@ namespace Magazyn.WebUI.Infrastructure
         private void AddBindings()
         {
             kernel.Bind<IProductRepository>().To<EFProductRepository>();
+            kernel.Bind<IProductNameRepository>().To<EFProductNameRepository>();
             kernel.Bind<ILoginRepository>().To<EFLoginRepository>();
-            kernel.Bind<IOrderRepository>().To<EFOrderRepository>();
-            kernel.Bind<ISaleRepository>().To<EFSaleRepository>();
+            kernel.Bind<IZamowienieRepository>().To<EFZamowienieRepository>();
+            kernel.Bind<IRezerwacjeRepository>().To<EFRezerwacjeRepository>();
             kernel.Bind<IPartnerRepository>().To<EFPartnerRepository>();
-            kernel.Bind<IMMRepository>().To<EFMMRepository>();
             kernel.Bind<IPWRepository>().To<EFPWRepository>();
             kernel.Bind<IPZRepository>().To<EFPZRepository>();
             kernel.Bind<IRWRepository>().To<EFRWRepository>();
             kernel.Bind<IRZRepository>().To<EFRZRepository>();
             kernel.Bind<ISetRepository>().To<EFSetRepository>();
+            kernel.Bind<IKontrahentRepository>().To<EFKontrahentRepository>();
+            kernel.Bind<ICategoryRepository>().To<EFCategoryRepository>();
+            kernel.Bind<ISetProductRepository>().To<EFSetProductRepository>();
 
 
             EmailSettings emailSettings = new EmailSettings {

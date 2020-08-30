@@ -1,7 +1,7 @@
-﻿@model Magazyn.Domain.Entities.Product
+﻿@model Magazyn.Domain.Entities.Kontrahent
 
 @{
-    ViewBag.Title = "Administracja: dodawanie produktu : " + @Model.Name;
+    ViewBag.Title = "Administracja: edycja " + @Model;
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     HtmlHelper.ClientValidationEnabled = false;
     HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
@@ -9,30 +9,20 @@
 
 <div class="panel">
     <div class="panel-heading">
-        <h3>Przesunięcie towaru @Model.Name</h3>
+        <h3>Zarządzanie kontrahentami</h3>
     </div>
-    @using (Html.BeginForm("PrzesuniecieMagazynowe", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("EditKontrahent", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="panel-body">
-            @Html.HiddenFor(m => m.ProductID)
-            @Html.HiddenFor(m => m.Category)
-            @Html.HiddenFor(m => m.Description)
-            @Html.HiddenFor(m => m.ImageData)
-            @Html.HiddenFor(m => m.ImageMimeType)
-            @Html.HiddenFor(m => m.Total)
-            @Html.HiddenFor(m => m.Price)
+            @Html.HiddenFor(m => m.KontrahentID)
 
             @foreach (var property in ViewData.ModelMetadata.Properties)
             {
                 switch (property.PropertyName)
                 {
-                    case "ProductID":
-                    case "Category":
-                    case "Description":
+                    case "KontrahentID":
                     case "ImageData":
                     case "ImageMimeType":
-                    case "Total":
-                    case "Price":
                         // Brak operacji.
                         break;
                     default:
@@ -52,17 +42,39 @@
                         break;
                 }
             }
+            <div class="form-group">
+                <div style="position:relative;">
+                    <label>Zdjęcie</label>
+                    <a class='btn' href='javascript:;'>
+                        Wybierz plik...
+                        <input type="file" name="Image" size="40"
+                               style="position:absolute;z-index:2;top:0;
+                       left:0;filter: alpha(opacity=0); opacity:0;
+                       background-color:transparent;color:transparent;"
+                               onchange='$("#upload-file-info").html($(this).val());'>
+                    </a>
+                    <span class='label label-info' id="upload-file-info"></span>
+                </div>
+                @if (Model.ImageData == null)
+                {
+                    <div class="form-control-static">Brak zdjęcia</div> }
+                else
+                {
+                    <img class="img-thumbnail" width="150" height="150"
+                         src="@Url.Action("KontrahentGetImage", "Product",
+                         new { Model.KontrahentID })" />
+                }
+            </div>
         </div>
 
 
 
         <div class="panel-footer">
             <input type="submit" value="Zapisz" class="btn btn-primary" />
-            @Html.ActionLink("Anuluj i wróć do listy", "Index", null, new
+            @Html.ActionLink("Anuluj i wróć do listy", "Kontrahent", null, new
             {
            @class = "btn btn-default"
             })
-
         </div>
     }
 </div>

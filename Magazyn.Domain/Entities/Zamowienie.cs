@@ -4,10 +4,10 @@ using System.Web.Mvc;
 
 namespace Magazyn.Domain.Entities
 {
-    public class Order
+    public class Zamowienie
     {
         [HiddenInput(DisplayValue = false)]
-        public int OrderID { get; set; }
+        public int ZamowienieID { get; set; }
 
         [Display(Name = "ID użytkownika")]
         public int LoginID { get; set; }
@@ -15,7 +15,7 @@ namespace Magazyn.Domain.Entities
         [Required]
         [Range(0.01, double.MaxValue, ErrorMessage = "Proszę podać dodatnią cenę.")]
         [Display(Name = "Kwota Całkowita")]
-        public decimal Amount { get; set; }
+        public decimal Cena { get; set; }
 
         [Display(Name = "Zakończone")]
         public bool Ended { get; set; }

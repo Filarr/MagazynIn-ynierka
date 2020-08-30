@@ -1,4 +1,4 @@
-﻿@model Magazyn.WebUI.Models.PartnerListViewModel
+﻿@model Magazyn.WebUI.Models.KontrahentListViewModel
 
 <head>
     <meta charset="utf-8" />
@@ -17,9 +17,9 @@
         }
     </style>
 
-    @foreach (var p in Model.Partners)
+    @foreach (var p in Model.Kontrahents)
     {
-        @Html.Partial("PartnerSummary", p);
+        @Html.Partial("KontrahentSummary", p);
     }
 
     <div class="abc2"></div>

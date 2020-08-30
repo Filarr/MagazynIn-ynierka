@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Magazyn.Domain.Entities.Order>
+﻿@model IEnumerable<Magazyn.Domain.Entities.Zamowienie>
 
 @{
     ViewBag.Title = "View";
@@ -22,7 +22,7 @@
             if (item.LoginID == (int) Session["userID"])
             {
             <tr>
-                <td>@item.Amount</td>
+                <td>@item.Cena</td>
                 <td>@item.Ended</td>
                 <td>@item.Complete</td>
                 <td>@item.Data</td>

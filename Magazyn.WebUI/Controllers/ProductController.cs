@@ -15,16 +15,16 @@ namespace Magazyn.WebUI.Controllers
         
         private IProductRepository repository;
         private ILoginRepository repository2;
-        private IOrderRepository repository3;
-        private IPartnerRepository repository5;
+        private IZamowienieRepository repository3;
+        private IKontrahentRepository repository5;
 
         public int PageSize = 5;
-        public ProductController(IProductRepository productRepository, ILoginRepository loginRepository, IOrderRepository orderRepository, IPartnerRepository partnerRepository)
+        public ProductController(IProductRepository productRepository, ILoginRepository loginRepository, IZamowienieRepository orderRepository, IKontrahentRepository kontrahentRepository)
         {
             this.repository = productRepository;
             this.repository2 = loginRepository;
             this.repository3 = orderRepository;
-            this.repository5 = partnerRepository;
+            this.repository5 = kontrahentRepository;
         }
         
         public ViewResult List(string category, int page = 1)
@@ -66,12 +66,12 @@ namespace Magazyn.WebUI.Controllers
 
         }
 
-        public FileContentResult PartnerGetImage(int partnerId)
+        public FileContentResult KontrahentGetImage(int kontrahentId)
         {
-            Partner prod = repository5.Partners.FirstOrDefault(p => p.PartnerID == partnerId);
+            Kontrahent prod = repository5.Kontrahents.FirstOrDefault(p => p.KontrahentID == kontrahentId);
             if (prod != null)
             {
-                return File(prod.PartnerImageData, prod.PartnerImageMimeType);
+                return File(prod.ImageData, prod.ImageMimeType);
             }
             else
             {
@@ -80,16 +80,16 @@ namespace Magazyn.WebUI.Controllers
 
         }
 
-        public PartialViewResult ListaPartnerow()
+        public PartialViewResult ListaKontrahentow()
         {
 
-            PartnerListViewModel model = new PartnerListViewModel
+            KontrahentListViewModel model = new KontrahentListViewModel
             {
-                Partners = repository5.Partners
+                Kontrahents = repository5.Kontrahents
             };
 
 
-            return PartialView("ListaPartnerow",model);
+            return PartialView("ListaKontrahentow",model);
         }
 
         public ViewResult Formularz()
@@ -104,7 +104,7 @@ namespace Magazyn.WebUI.Controllers
 
         public ViewResult TwojeZamowienia()
         {
-            return View(repository3.Orders);
+            return View(repository3.Zamowienies);
         }
 
        

@@ -20,12 +20,13 @@ namespace Magazyn.WebUI.Models
         [Display(Name = "Ilość produktu")]
         public string Ilość { get; set; }
 
-        [Required(ErrorMessage = "Proszę podać nazwę kontrahenta.")]
+        
         [Display(Name = "Nazwa kontrahenta")]
         public string Kontrahent { get; set; }
 
-        [Required(ErrorMessage = "Proszę podać email")]
-        [Display(Name = "Nazwa kontrahenta")]
-        public string email { get; set; }
+        
+        [Display(Name = "Email")]
+        public string emaill { get; set; }
+
     }
 }

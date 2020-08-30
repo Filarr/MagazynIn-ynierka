@@ -10,15 +10,17 @@ namespace Magazyn.Domain.Concrete
 {
     public class EFDbContext : DbContext {
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<ProductName> ProductNames { get; set; }
+
         public DbSet<Login> Logins { get; set; }
+        public DbSet<Category> Categorys { get; set; }
 
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<Zamowienie> Zamowienies { get; set; }
 
-        public DbSet<Sale> Sales { get; set; }
+        public DbSet<Rezerwacje> Rezerwacjes { get; set; }
 
         public DbSet<Partner> Partners { get; set; }
-
-        public DbSet<MM> MMs { get; set; }
 
         public DbSet<RZ> RZs { get; set; }
 
@@ -30,7 +32,9 @@ namespace Magazyn.Domain.Concrete
 
         public DbSet<Set> Sets { get; set; }
 
+        public DbSet<Kontrahent> Kontrahents { get; set; }
 
+        public DbSet<SetProduct> SetProducts { get; set; }
 
 
     }

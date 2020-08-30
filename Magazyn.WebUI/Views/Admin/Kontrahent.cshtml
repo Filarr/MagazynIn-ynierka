@@ -1,7 +1,7 @@
-﻿@model IEnumerable<Magazyn.Domain.Entities.Partner>
+﻿@model IEnumerable<Magazyn.Domain.Entities.Kontrahent>
 
 @{
-    ViewBag.Title = "Administracja: Partnerzy";
+    ViewBag.Title = "Administracja: Kontrahenci";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     if (Session["userID"] == null)
     {
@@ -85,7 +85,7 @@
 <div class="menu-bar" role="navigation">
     <ul>
         <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Produkty", "Index")</a></li>
-        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Partnerzy", "Partner")</a></li>
+        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Kontrahent", "Kontrahent")</a></li>
         <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Zestawy", "Zestaw")</a></li>
         <li><i class="fa fa-users"></i>@Html.ActionLink("Użytkownicy", "DaneUżytkowników")</a></li>
         <li><i class="fa fa-address-book"></i>@Html.ActionLink("Zamówienia", "Zamowienia")</a></li>
@@ -109,28 +109,38 @@
         <tr>
             <th>ID</th>
             <th>Nazwa</th>
+            <th>Adres</th>
+            <th>Miasto</th>
+            <th>Kod pocztowy</th>
+            <th>Numer telefonu</th>
+            <th>Email</th>
             <th>Akcje</th>
         </tr>
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.PartnerID</td>
-                <td>@Html.ActionLink(item.Name, "EditPartner", new { item.PartnerID })</td>
-                <td>
-                    @using (Html.BeginForm("DeletePartner", "Admin"))
-                    {
-                        @Html.Hidden("PartnerID", item.PartnerID)
-                        <input type="submit" value="Usuń partnera" />
-                    }
-                </td>
-            </tr>
+        <tr>
+            <td>@item.KontrahentID</td>
+            <td>@Html.ActionLink(item.NazwaKontrahenta, "EditKontrahent", new { item.KontrahentID })</td>
+            <td>@item.Adres</td>
+            <td>@item.Miasto</td>
+            <td>@item.KodPocztowy</td>
+            <td>@item.NumerTelefonu</td>
+            <td>@item.Email</td>
+            <td>
+                @using (Html.BeginForm("DeleteKontrahent", "Admin"))
+                {
+                    @Html.Hidden("KontrahentID", item.KontrahentID)
+                    <input type="submit" value="Usuń kontrahenta" />
+                }
+            </td>
+        </tr>
         }
     </table>
 
 </div>
 <div class="panel-footer">
-    @Html.ActionLink("Dodaj nowego partnera", "CreatePartner", null,
+    @Html.ActionLink("Dodaj nowego kontrahenta", "CreateKontrahent", null,
     new { @class = "btn btn-default" })
 </div>
 

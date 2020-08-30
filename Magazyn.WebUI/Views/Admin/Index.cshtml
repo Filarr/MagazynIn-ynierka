@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Magazyn.Domain.Entities.Product>
+﻿@model IEnumerable<Magazyn.Domain.Entities.ProductName>
 
 @{
     ViewBag.Title = "Administracja: Wszystkie produkty";
@@ -87,14 +87,14 @@ input[type=button], input[type=submit], input[type=reset] {
 <div class="menu-bar" role="navigation">
     <ul>
         <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Produkty", "Index")</a></li>
-        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Partnerzy", "Partner")</a></li>
+        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Kategorie", "Kategorie")</a></li>
+        <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Kontrahent", "Kontrahent")</a></li>
         <li><i class="fa fa-cart-arrow-down"></i>@Html.ActionLink("Zestawy", "Zestaw")</a></li>
         <li><i class="fa fa-users"></i>@Html.ActionLink("Użytkownicy", "DaneUżytkowników")</a></li>
         <li><i class="fa fa-address-book"></i>@Html.ActionLink("Zamówienia", "Zamowienia")</a></li>
         <li><i class="fa fa-calendar"></i> @Html.ActionLink("Operacje", "Magazyn")</a></li>
     </ul>
     <ul>
-        <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty MM", "MM")</a></li>
         <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty PW", "PW")</a></li>
         <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty PZ", "PZ")</a></li>
         <li><i class="fa fa-address-book"></i> @Html.ActionLink("Dokumenty RW", "RW")</a></li>
@@ -110,22 +110,18 @@ input[type=button], input[type=submit], input[type=reset] {
             <tr>
                 <th>ID</th>
                 <th>Nazwa</th>
-                <th class="NumericCol">Cena</th>
-                <th>Ilość - Razem</th>
-                <th>Magazyn 1</th>
-                <th>Magazyn 2</th>
+                <th>Kategorie</th>
+                <th>Opis</th>
                 <th>Akcje</th>
             </tr>
 
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.ProductID</td>
-                    <td>@Html.ActionLink(item.Name, "Edit", new { item.ProductID })</td>
-                    <td class="NumericCol">@item.Price.ToString("c")</td>
-                    <td>@item.Total.ToString()</td>
-                    <td>@item.Warehouse1.ToString()</td>
-                    <td>@item.Warehouse2.ToString()</td>
+                    <td>@item.ProductNameID.ToString()</td>
+                    <td>@Html.ActionLink(item.Name, "Edit", new { item.ProductNameID })</td>
+                    <td>@item.Category</td>
+                    <td>@item.Description</td>
                     <td>
                         @using (Html.BeginForm("Delete", "Admin"))
                         {
@@ -133,7 +129,6 @@ input[type=button], input[type=submit], input[type=reset] {
                             <input type="submit" value="Usuń produkt" />
                         }@Html.ActionLink("Dodaj Towar", "DodawanieProduktów", new { item.ProductID }, new { @class = "delete" })
                         @Html.ActionLink("Usuń Towar", "ŚciąganieProduktów", new { item.ProductID }, new { @class = "delete" })
-                        @Html.ActionLink("Przesuń Towar", "PrzesuniecieMagazynowe", new { item.ProductID }, new { @class = "delete" })
                         @Html.ActionLink("Zamów Towar", "BrakTowaru", new { item.ProductID }, new { @class = "delete" })
                     </td>
                 </tr>

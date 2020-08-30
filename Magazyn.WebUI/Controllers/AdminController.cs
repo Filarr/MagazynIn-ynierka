@@ -17,18 +17,19 @@ namespace Magazyn.WebUI.Controllers
     {
         private IProductRepository repository;
         private ILoginRepository repository2;
-        private IOrderRepository repository3;
-        private ISaleRepository repository4;
-        private IPartnerRepository repository5;
+        private IZamowienieRepository repository3;
+        private IRezerwacjeRepository repository4;
+        private IKontrahentRepository repository5;
         private ISetRepository repository6;
-        private IMMRepository repository7;
+        private ICategoryRepository repository7;
         private IPWRepository repository8;
         private IPZRepository repository9;
         private IRWRepository repository10;
         private IRZRepository repository11;
+        private IProductNameRepository repository12;
     
 
-        public AdminController(IProductRepository repo, ILoginRepository repo2, IOrderRepository repo3, ISaleRepository repo4,IPartnerRepository repo5,ISetRepository repo6, IMMRepository repo7, IPWRepository repo8, IPZRepository repo9, IRWRepository repo10, IRZRepository repo11) {
+        public AdminController(IProductRepository repo, ILoginRepository repo2, IZamowienieRepository repo3, IRezerwacjeRepository repo4,IKontrahentRepository repo5,ISetRepository repo6, ICategoryRepository repo7, IPWRepository repo8, IPZRepository repo9, IRWRepository repo10, IRZRepository repo11, IProductNameRepository repo12) {
             repository = repo;
             repository2 = repo2;
             repository3 = repo3;
@@ -40,11 +41,12 @@ namespace Magazyn.WebUI.Controllers
             repository9 = repo9;
             repository10 = repo10;
             repository11 = repo11;
+            repository12 = repo12;
         }
 
 
         public ViewResult Index() {
-            return View(repository.Products);
+            return View(repository12.ProductNames);
         }
 
         public ViewResult Index2()
@@ -64,18 +66,19 @@ namespace Magazyn.WebUI.Controllers
 
         public ViewResult Zamowienia()
         {
-            return View(repository3.Orders);
+            return View(repository3.Zamowienies);
         }
 
-        public ViewResult Partner()
+        public ViewResult Kontrahent()
         {
-            return View(repository5.Partners);
+            return View(repository5.Kontrahents);
         }
 
-        public ViewResult MM()
+        public ViewResult Kategorie()
         {
-            return View(repository7.MMs);
+            return View(repository7.Categorys);
         }
+     
         public ViewResult PW()
         {
             return View(repository8.PWs);
@@ -126,22 +129,6 @@ namespace Magazyn.WebUI.Controllers
              return new ActionAsPdf("DokumentyPZ", abc) { FileName = "PZ.pdf" };
             
         }
-        public ActionResult DokumentyDrukujMM(int MMId)
-        {
-            MM abc = repository7.MMs
-                .FirstOrDefault(p => p.MMID == MMId);
-
-            return new ActionAsPdf("DokumentyMM", abc) { FileName = "MM.pdf" };
-
-        }
-
-        public ViewResult DokumentyMM(int MMId)
-        {
-            MM abc = repository7.MMs
-                .FirstOrDefault(p => p.MMID == MMId);
-            return View(abc);
-        }
-
 
         public ViewResult DokumentyPZ(int PZId)
         {
@@ -153,24 +140,32 @@ namespace Magazyn.WebUI.Controllers
 
         public ViewResult Magazyn()
         {
-            return View(repository4.Sales);
+            return View(repository4.Rezerwacjes);
         }
 
 
-        public ViewResult Edit(int productId) {
+        public ViewResult Edit(int productNameId) {
 
-            Product product = repository.Products
-                .FirstOrDefault(p => p.ProductID == productId);
+            ProductName productname = repository12.ProductNames
+                .FirstOrDefault(p => p.ProductNameID == productNameId);
 
-      
-            return View(product);
+            ViewBag.kategorie = repository7.Categorys;
+
+            return View(productname);
         }
 
-        public ViewResult EditPartner(int partnerId)
+        public ViewResult EditKontrahent(int kontrahentId)
         {
-            Partner partner = repository5.Partners
-                .FirstOrDefault(p => p.PartnerID == partnerId);
-            return View(partner);
+            Kontrahent kontrahent = repository5.Kontrahents
+                .FirstOrDefault(p => p.KontrahentID == kontrahentId);
+            return View(kontrahent);
+        }
+
+        public ViewResult EditKategorie(int categorieId)
+        {
+            Category kategorie = repository7.Categorys
+                .FirstOrDefault(p => p.CategoryID == categorieId);
+            return View(kategorie);
         }
 
         public ViewResult DodawanieProduktów(int productId)
@@ -186,19 +181,12 @@ namespace Magazyn.WebUI.Controllers
 
         public ViewResult ŚciąganieProduktów(int productId)
         {
-
-
             Product product = repository.Products
                 .FirstOrDefault(p => p.ProductID == productId);
             return View(product);
         }
 
-        public ViewResult PrzesuniecieMagazynowe(int productId)
-        {
-            Product product = repository.Products
-                .FirstOrDefault(p => p.ProductID == productId);
-            return View(product);
-        }
+  
 
         public ViewResult EditUser(int loginID)
         {
@@ -207,15 +195,19 @@ namespace Magazyn.WebUI.Controllers
             return View(login);
         }
 
+      
+
         public ViewResult BrakTowaru(int productId)
         {
-            Product product = repository.Products
+            ProductName product = repository12.ProductNames
                 .FirstOrDefault(p => p.ProductID == productId);
-
 
             var model = new BrakTowaruEmail();
 
             model.Name = product.Name;
+
+            ViewBag.kontrahenci = repository5.Kontrahents;
+  
 
             return View(model);
         }
@@ -225,52 +217,13 @@ namespace Magazyn.WebUI.Controllers
         public ActionResult DodawanieProduktów(DodajProduktView dodaj)
         {
             DateTime localdate = DateTime.Now;
-            Product product2 = repository.Products
-            .FirstOrDefault(p => p.Name == dodaj.product.Name);
-
+            
             PZ przychodzewnetrzny = new PZ();
 
-            Login uzytkwonik = repository2.Logins
-                .FirstOrDefault(p => p.LoginID == (int)Session["userID"]);
-
-            if (dodaj.przychodZewnetrzny.Magazyn.Equals("Magazyn 1"))
-            {
-                var nowa_sredniacena = ((product2.Total * product2.Price) + (dodaj.product.Total * dodaj.przychodZewnetrzny.Cena)) / (product2.Total + dodaj.product.Total);
-                product2.Warehouse1 = product2.Warehouse1 + dodaj.product.Total;
-                product2.Total = product2.Total + dodaj.product.Total;
-                product2.Price = nowa_sredniacena;
-            }
-            else if (dodaj.przychodZewnetrzny.Magazyn.Equals("Magazyn 2"))
-            {
-                var nowa_sredniacena = ((product2.Total * product2.Price) + (dodaj.product.Total * dodaj.przychodZewnetrzny.Cena)) / (product2.Total + dodaj.product.Total);
-                product2.Warehouse1 = product2.Warehouse2 + dodaj.product.Total;
-                product2.Total = product2.Total + dodaj.product.Total;
-                product2.Price = nowa_sredniacena;
-            }
-            else
-            {
-                TempData["message"] = string.Format("Błąd danych. Spróbuj ponownie {0} ", dodaj.product.Name);
-                return RedirectToAction("Index");
-            }
-
-            przychodzewnetrzny.Wystawiajacy = uzytkwonik.User;
-            przychodzewnetrzny.Miesiac = localdate.Month;
-            przychodzewnetrzny.Rok = localdate.Year;
-            przychodzewnetrzny.Adres = dodaj.przychodZewnetrzny.Adres;
-            przychodzewnetrzny.Miasto = dodaj.przychodZewnetrzny.Miasto;
-            przychodzewnetrzny.KodPocztowy = dodaj.przychodZewnetrzny.KodPocztowy;
-            przychodzewnetrzny.DataWystawienia = localdate;
-            przychodzewnetrzny.Ilosc = dodaj.product.Total;
-            przychodzewnetrzny.Kontrahent = dodaj.przychodZewnetrzny.Kontrahent;
-            przychodzewnetrzny.Produkt = dodaj.product.Name;
-            przychodzewnetrzny.Cena = dodaj.przychodZewnetrzny.Cena;
-            przychodzewnetrzny.CenaCalkowita = dodaj.przychodZewnetrzny.Cena * dodaj.product.Total;
-            przychodzewnetrzny.Magazyn = dodaj.przychodZewnetrzny.Magazyn;
-
-
-            repository.SaveProduct(product2);
+            
+            
             repository9.SavePZ(przychodzewnetrzny);
-            TempData["message"] = string.Format("Zapisano {0} ", dodaj.product.Name);
+            TempData["message"] = string.Format("Zapisano {0} ");
                 return RedirectToAction("Index");
          }
 
@@ -298,275 +251,11 @@ namespace Magazyn.WebUI.Controllers
                 return RedirectToAction("Zestaw");
             }
 
-            product.Category = "Zestaw";
-            product.Description = "Zestaw produktów:";
-            product.Name = dodaj.zestaw.Name;
-            product.Price = 0;
-            product.Total = dodaj.product.Total;
-            product.Warehouse1 = dodaj.product.Total;
-            product.Warehouse2 = 0;
-
-            rozchodwewnetrzny.DataWystawienia = localdate;
-            rozchodwewnetrzny.Miesiac = localdate.Month;
-            rozchodwewnetrzny.Rok = localdate.Year;
-            rozchodwewnetrzny.Wystawiajacy = uzytkwonik.Name;
-            rozchodwewnetrzny.CenaCalkowita = 0;
-            
-
-            przychodwewmetrzny.DataWystawienia = localdate;
-            przychodwewmetrzny.Magazyn = "Magazyn 1";
-            przychodwewmetrzny.Miesiac = localdate.Month;
-            przychodwewmetrzny.Rok = localdate.Year;
-            przychodwewmetrzny.Wystawiajacy = uzytkwonik.Name;
-            przychodwewmetrzny.Produkt = dodaj.zestaw.Name;
-            przychodwewmetrzny.Ilosc = dodaj.product.Total;
-            przychodwewmetrzny.CenaCalkowita = 0;
-
-            zestaw.Name = dodaj.zestaw.Name;
-            zestaw.ProduktName1 = dodaj.zestaw.ProduktName1;
-            zestaw.ProduktName2 = dodaj.zestaw.ProduktName2;
-            zestaw.ProduktName3 = dodaj.zestaw.ProduktName3;
-            zestaw.ProduktName4 = dodaj.zestaw.ProduktName4;
-            zestaw.ProduktName5 = dodaj.zestaw.ProduktName5;
+           
 
 
-
-
-
-            product1 = repository.Products
-                    .FirstOrDefault(p => p.Name == dodaj.zestaw.ProduktName1);
-            product2 = repository.Products
-                .FirstOrDefault(p => p.Name == dodaj.zestaw.ProduktName2);
-            product3 = repository.Products
-                .FirstOrDefault(p => p.Name == dodaj.zestaw.ProduktName3);
-            product4 = repository.Products
-                    .FirstOrDefault(p => p.Name == dodaj.zestaw.ProduktName4);
-            product5 = repository.Products
-                    .FirstOrDefault(p => p.Name == dodaj.zestaw.ProduktName5);
-
-           if(product1.Total < dodaj.product.Total)
-            {
-                TempData["message"] = string.Format("Nie wystarczająco produktów na magazynie {0} ", dodaj.zestaw.ProduktName1);
-                return RedirectToAction("Zestaw");
-            }
-            else
-            {
-                var z = dodaj.product.Total;
-                product1.Total -= dodaj.product.Total;
-                if(product1.Warehouse1<z)
-                {
-                    z -= product1.Warehouse1;
-                    product1.Warehouse1 = 0;
-                    product1.Warehouse2 -= z;
-                }
-                else
-                {
-                    product1.Warehouse1 -= z;
-                }
-                rozchodwewnetrzny.CenaCalkowita += product1.Price * dodaj.product.Total;
-                rozchodwewnetrzny.Produkty += product1.Name + "\t" + product1.Price + "\n";
-                product.Description += product1.Name + ",";
-                repository.SaveProduct(product1);
-            }
-
-           if(product2 != null)
-            {
-                if (product2.Total < dodaj.product.Total)
-                {
-                    TempData["message"] = string.Format("Nie wystarczająco produktów na magazynie {0} ", dodaj.zestaw.ProduktName2);
-                    return RedirectToAction("Zestaw");
-                }
-                else
-                {
-                    var z = dodaj.product.Total;
-                    product2.Total -= dodaj.product.Total;
-                    if (product2.Warehouse1 < z)
-                    {
-                        z -= product1.Warehouse1;
-                        product2.Warehouse1 = 0;
-                        product2.Warehouse2 -= z;
-                    }
-                    else
-                    {
-                        product2.Warehouse1 -= z;
-                    }
-                    rozchodwewnetrzny.CenaCalkowita += product2.Price * dodaj.product.Total;
-                    rozchodwewnetrzny.Produkty += product2.Name + "\t" + product2.Price + "\n";
-                    product.Description += product2.Name + ",";
-                    repository.SaveProduct(product2);
-                }
-
-            }
-
-            if (product3 != null)
-            {
-                if (product3.Total < dodaj.product.Total)
-                {
-                    TempData["message"] = string.Format("Nie wystarczająco produktów na magazynie {0} ", dodaj.zestaw.ProduktName3);
-                    return RedirectToAction("Zestaw");
-                }
-                else
-                {
-                    var z = dodaj.product.Total;
-                    product3.Total -= dodaj.product.Total;
-                    if (product3.Warehouse1 < z)
-                    {
-                        z -= product1.Warehouse1;
-                        product3.Warehouse1 = 0;
-                        product3.Warehouse2 -= z;
-                    }
-                    else
-                    {
-                        product3.Warehouse1 -= z;
-                    }
-                    rozchodwewnetrzny.CenaCalkowita += product3.Price * dodaj.product.Total;
-                    rozchodwewnetrzny.Produkty += product3.Name + "\t" + product3.Price +"\n";
-                    product.Description += product3.Name + ",";
-                    repository.SaveProduct(product3);
-                }
-
-            }
-
-            if (product4 != null)
-            {
-                if (product4.Total < dodaj.product.Total)
-                {
-                    TempData["message"] = string.Format("Nie wystarczająco produktów na magazynie {0} ", dodaj.zestaw.ProduktName4);
-                    return RedirectToAction("Zestaw");
-                }
-                else
-                {
-                    var z = dodaj.product.Total;
-                    product4.Total -= dodaj.product.Total;
-                    if (product4.Warehouse1 < z)
-                    {
-                        z -= product1.Warehouse1;
-                        product4.Warehouse1 = 0;
-                        product4.Warehouse2 -= z;
-                    }
-                    else
-                    {
-                        product4.Warehouse1 -= z;
-                    }
-                    rozchodwewnetrzny.CenaCalkowita += product4.Price * dodaj.product.Total;
-                    rozchodwewnetrzny.Produkty += product4.Name + "\t" + product4.Price + "\n";
-                    product.Description += product4.Name + ",";
-                    repository.SaveProduct(product4);
-                }
-
-            }
-
-            if (product5 != null)
-            {
-                if (product5.Total < dodaj.product.Total)
-                {
-                    TempData["message"] = string.Format("Nie wystarczająco produktów na magazynie {0} ", dodaj.zestaw.ProduktName5);
-                    return RedirectToAction("Zestaw");
-                }
-                else
-                {
-                    var z = dodaj.product.Total;
-                    product5.Total -= dodaj.product.Total;
-                    if (product5.Warehouse1 < z)
-                    {
-                        z -= product1.Warehouse1;
-                        product5.Warehouse1 = 0;
-                        product5.Warehouse2 -= z;
-                    }
-                    else
-                    {
-                        product5.Warehouse1 -= z;
-                    }
-                    rozchodwewnetrzny.CenaCalkowita += product5.Price * dodaj.product.Total;
-                    rozchodwewnetrzny.Produkty += product5.Name + "\t" + product5.Price + "\n";
-                    product.Description += product5.Name + ",";
-                    repository.SaveProduct(product5);
-                }
-
-            }
-
-            przychodwewmetrzny.CenaCalkowita = rozchodwewnetrzny.CenaCalkowita;
-            product.Price = rozchodwewnetrzny.CenaCalkowita / dodaj.product.Total;
-            zestaw.Cena = product.Price;
-
-            repository.SaveProduct(product);
-            
-            
-
-            zestaw.ProductID = product.ProductID;
-            repository8.SavePW(przychodwewmetrzny);
-            repository10.SaveRW(rozchodwewnetrzny);
-            repository6.SaveSet(zestaw);
-
-
-            TempData["message"] = string.Format("Zapisano {0} ", dodaj.product.Name);
+            TempData["message"] = string.Format("Zapisano {0} ");
             return RedirectToAction("Zestaw");
-        }
-
-
-        [HttpPost]
-        public ActionResult PrzesuniecieMagazynowe(Product product)
-        {
-            DateTime localdate = DateTime.Now;
-            Product product2 = repository.Products
-            .FirstOrDefault(p => p.ProductID == product.ProductID);
-
-            Login uzytkwonik = repository2.Logins
-                .FirstOrDefault(p => p.LoginID == (int)Session["userID"]);
-
-
-            MM dokumentprzesuniecia = new MM();
-            dokumentprzesuniecia.Wystawiajacy = uzytkwonik.User;
-            dokumentprzesuniecia.Miesiac = localdate.Month;
-            dokumentprzesuniecia.Rok = localdate.Year;
-            dokumentprzesuniecia.DataWystawienia = localdate;
-            dokumentprzesuniecia.NazwaProduktu = product.Name;
-
-
-            if (product.Warehouse1 == 0 && product.Warehouse2 == 0)
-            {
-                TempData["message"] = string.Format("Błąd danych. Spróbuj ponownie {0} ", product.Name);
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                if (product2.Total != (product.Warehouse1 + product.Warehouse2))
-                {
-                    TempData["message"] = string.Format("Błąd danych. Spróbuj ponownie {0} ", product.Name);
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    if (product.Warehouse1 > product2.Warehouse1)
-                    {
-                        int z = product2.Warehouse1-product.Warehouse1 ;
-                        dokumentprzesuniecia.MagazynPrzyjmujacy = "Magazyn 1";
-                        dokumentprzesuniecia.MagazynWydajacy = "Magazyn 2";
-                        dokumentprzesuniecia.Ilosc = z;
-                    } else
-                        if (product.Warehouse2 > product2.Warehouse2)
-                            {
-                                 int z = product.Warehouse2 - product2.Warehouse2;
-                                 dokumentprzesuniecia.MagazynPrzyjmujacy = "Magazyn 2";
-                                 dokumentprzesuniecia.MagazynWydajacy = "Magazyn 1";
-                                 dokumentprzesuniecia.Ilosc = z;
-                            }
-                            else
-                                {
-                                TempData["message"] = string.Format("Błąd danych. Spróbuj ponownie {0} ", product.Name);
-                                return RedirectToAction("Index");
-                                }
-
-
-
-                    product2.Warehouse1 = product.Warehouse1;
-                    product2.Warehouse2 = product.Warehouse2;
-                    repository7.SaveMM(dokumentprzesuniecia);
-                    repository.SaveProduct(product2);
-                    TempData["message"] = string.Format("Zapisano {0} ", product.Name);
-                    return RedirectToAction("Index");
-                }
-            }
         }
 
         [HttpPost]
@@ -581,75 +270,38 @@ namespace Magazyn.WebUI.Controllers
 
             RW rozchodwewnetrzny = new RW();
 
-            rozchodwewnetrzny.DataWystawienia = localdate;
-            rozchodwewnetrzny.Miesiac = localdate.Month;
-            rozchodwewnetrzny.Rok = localdate.Year;
-            rozchodwewnetrzny.Wystawiajacy = uzytkwonik.User;
-            rozchodwewnetrzny.Produkty = product.Name + "\t" +(product.Warehouse1+product.Warehouse2);
-            rozchodwewnetrzny.CenaCalkowita = product.Price * (product.Warehouse1 + product.Warehouse2);
-
-            if (product.Warehouse1 == 0 && product.Warehouse2 == 0)
-            {
-                TempData["message"] = string.Format("Błąd danych. Spróbuj ponownie {0} ", product.Name);
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                if(product.Warehouse1!=0)
-                {
-                    if(product.Warehouse1>product2.Warehouse1)
-                    {
-                        TempData["message"] = string.Format("Błąd danych. Spróbuj ponownie {0} ", product.Name);
-                        return RedirectToAction("Index");
-
-                    }
-                    else
-                    {
-                        product2.Warehouse1 -= product.Warehouse1;
-                        product2.Total -= product.Warehouse1;
-                        
-                    }
-                }
-
-                if(product.Warehouse2!=0)
-                {
-
-                    if (product.Warehouse2 > product2.Warehouse2)
-                    {
-                        TempData["message"] = string.Format("Błąd danych. Spróbuj ponownie {0} ", product.Name);
-                        return RedirectToAction("Index");
-
-                    }
-                    else
-                    {
-                        product2.Warehouse2 -= product.Warehouse2;
-                        product2.Total -= product.Warehouse2;
-                    }
-                }
+           
 
 
-                product2.Total = product2.Warehouse1 + product2.Warehouse2;
+                
                 repository.SaveProduct(product2);
                 repository10.SaveRW(rozchodwewnetrzny);
                
-                TempData["message"] = string.Format("Zapisano {0} ", product.Name);
+                TempData["message"] = string.Format("Zapisano {0} ", product.ProductID);
 
                 return RedirectToAction("Index");
-            }
+            
             
 
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product, HttpPostedFileBase image = null)
+        public ActionResult Edit(ProductName product, HttpPostedFileBase image = null)
         {
+            ViewBag.kategorie = repository7.Categorys;
             if (ModelState.IsValid) {
+                Category kategorie = repository7.Categorys
+                .FirstOrDefault(p => p.Name == product.Category);
+
+                product.CategoryID = kategorie.CategoryID;
+                
+
                 if (image != null) {
                     product.ImageMimeType = image.ContentType;
                     product.ImageData = new byte[image.ContentLength];
                     image.InputStream.Read(product.ImageData, 0, image.ContentLength);
                 }
-                repository.SaveProduct(product);
+                repository12.SaveProductName(product);
                 TempData["message"] = string.Format("Zapisano {0} ", product.Name);
                 return RedirectToAction("Index"); }
             else
@@ -660,41 +312,47 @@ namespace Magazyn.WebUI.Controllers
         }
 
          [HttpPost]
-        public ActionResult EditPartner(Partner partner, HttpPostedFileBase image = null)
+        public ActionResult EditKontrahent(Kontrahent kontrahent, HttpPostedFileBase image = null)
         {
             if (ModelState.IsValid) {
                 if (image != null) {
-                    partner.PartnerImageMimeType = image.ContentType;
-                    partner.PartnerImageData = new byte[image.ContentLength];
-                    image.InputStream.Read(partner.PartnerImageData, 0, image.ContentLength);
+                    kontrahent.ImageMimeType = image.ContentType;
+                    kontrahent.ImageData = new byte[image.ContentLength];
+                    image.InputStream.Read(kontrahent.ImageData, 0, image.ContentLength);
                 }
-                repository5.SavePartner(partner);
-                TempData["message"] = string.Format("Zapisano {0} ", partner.Name);
-                return RedirectToAction("Partner"); }
+                repository5.SaveKontrahent(kontrahent);
+                TempData["message"] = string.Format("Zapisano {0} ", kontrahent.NazwaKontrahenta);
+                return RedirectToAction("Kontrahent"); }
             else
             {
                 // błąd w wartościach danych                
-                return View(partner);
+                return View(kontrahent);
             }
         }
 
         [HttpPost]
         public ActionResult BrakTowaru(BrakTowaruEmail formula)
         {
-         
+
+
+            Kontrahent kontrahent = repository5.Kontrahents
+                .FirstOrDefault(p => p.KontrahentID ==  Int32.Parse(formula.Kontrahent));
 
             if (ModelState.IsValid)
             {
                 BrakTowaruEmail email = new BrakTowaruEmail();
 
+                ViewBag.kontrahenci= repository5.Kontrahents;
+
+
                 email.Name = formula.Name;
                 email.Ilość = formula.Ilość;
-                email.Kontrahent = formula.Kontrahent;
-                email.email = formula.email;
+                email.Kontrahent = kontrahent.NazwaKontrahenta;
+                email.emaill = kontrahent.Email;
                 email.Send();
 
                 ViewBag.Messages = "Wysłano Formularz";
-                return View("BrakTowaru");
+                return View();
             }
             else
                 return View("BrakTowaru");
@@ -716,6 +374,24 @@ namespace Magazyn.WebUI.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult EditKategorie(Category kategorie)
+        {
+            if (ModelState.IsValid)
+            {
+                repository7.SaveCategory(kategorie);
+                TempData["message"] = string.Format("Zapisano {0} ", kategorie.Name);
+                return RedirectToAction("Kategorie");
+            }
+            else
+            {
+                // błąd w wartościach danych                
+                return View(kategorie);
+            }
+        }
+
+
+
         public ActionResult ActivateUser(Login login)
         {
             repository2.Active(login);
@@ -723,12 +399,14 @@ namespace Magazyn.WebUI.Controllers
             return RedirectToAction("DaneUżytkowników");
         }
 
-        public ActionResult ZakonczZamowienie(Order order)
+        public ActionResult ZakonczZamowienie(Zamowienie order)
         {
             DateTime localdate = DateTime.Now;
 
-            Order zamowienie = repository3.Orders
-            .FirstOrDefault(p => p.OrderID == order.OrderID);
+            
+
+            Zamowienie zamowienie = repository3.Zamowienies
+            .FirstOrDefault(p => p.ZamowienieID == order.ZamowienieID);
 
             Login uzytkwonik = repository2.Logins
                .FirstOrDefault(p => p.LoginID == zamowienie.LoginID);
@@ -738,87 +416,59 @@ namespace Magazyn.WebUI.Controllers
 
             if (zamowienie.Complete==false)
             {
-                TempData["message"] = string.Format("Skomplentuj najpierw zamówienie : ", order.OrderID);
+                TempData["message"] = string.Format("Skomplentuj najpierw zamówienie : ", order.ZamowienieID);
                 return RedirectToAction("Zamowienia");
             }
 
             RZ rozchodzewnetrzny = new RZ();
 
-            rozchodzewnetrzny.CenaCalkowita = zamowienie.Amount;
-            rozchodzewnetrzny.DataWystawienia = zamowienie.Data;
-            rozchodzewnetrzny.DataSprzedazy = localdate;
-            rozchodzewnetrzny.Miesiac = localdate.Month;
-            rozchodzewnetrzny.Rok = localdate.Year;
-            rozchodzewnetrzny.Kupujacy = uzytkwonik.User;
-            rozchodzewnetrzny.Wystawiajacy = wystawaiajacy.User;
+            
 
-
-            foreach (var item in repository4.Sales)
-             {
-                    if (item.OrderID == order.OrderID)
-                         {
-                            rozchodzewnetrzny.Produkty += item.ProductName + "," + item.Quantity + "," + item.Price + "\n";
-                         }
-             }
-
-            zamowienie.Ended = true;
-
-            repository3.SaveOrder(zamowienie);
+            repository3.SaveZamowienie(zamowienie);
 
             repository11.SaveRZ(rozchodzewnetrzny);
 
 
-            TempData["message"] = string.Format("Zakończono zamówienie {0} ", order.OrderID);
+            TempData["message"] = string.Format("Zakończono zamówienie {0} ", order.ZamowienieID);
             return RedirectToAction("Zamowienia");
         }
 
-        public ActionResult Braki(Order order)
+        public ActionResult Braki(Zamowienie order)
         {
             DateTime localdate = DateTime.Now;
 
-            Order zamowienie = repository3.Orders
-            .FirstOrDefault(p => p.OrderID == order.OrderID);
+            Zamowienie zamowienie = repository3.Zamowienies
+            .FirstOrDefault(p => p.ZamowienieID == order.ZamowienieID);
 
             Login uzytkwonik = repository2.Logins
                .FirstOrDefault(p => p.LoginID == zamowienie.LoginID);
 
             var wypelniono = true;
 
-            foreach (var item in repository4.Sales.ToList())
+            foreach (var item in repository4.Rezerwacjes.ToList())
             {
-                if (item.OrderID == order.OrderID)
+                if (item.ZamowienieID == order.ZamowienieID)
                 {
                     if (item.Complete == false)
                     {
                         Product product = repository.Products
                         .FirstOrDefault(p => p.ProductID == item.ProductID);
 
-                        int a = item.Quantity;
+                        int a = item.Ilosc;
 
                         if (a > product.Total)
                         {
                             wypelniono = false;
-                            TempData["message"] = string.Format("Nie uzupełniono produkt ", item.ProductName);
+                            TempData["message"] = string.Format("Nie uzupełniono produkt ", item.ProductID);
                         }
                         else
                         {
                             product.Total = product.Total - a;
-                            if (a > product.Warehouse1)
-                            {
-                                a = a - product.Warehouse1;
-                                product.Warehouse1 = 0;
-                                product.Warehouse2 = product.Warehouse2 - a;
-                                a = 0;
-                            }
-                            else
-                            {
-                                product.Warehouse1 = product.Warehouse1 - a;
-                                a = 0;
-                            }
+                            
 
                             item.Complete = true;
-                            TempData["message"] = string.Format("Uzupełniono o produkt ", item.ProductName);
-                            repository4.SaveSale(item);
+                            TempData["message"] = string.Format("Uzupełniono o produkt ", item.ProductID);
+                            repository4.SaveRezerwacje(item);
                             repository.SaveProduct(product);
                         }
                     }
@@ -828,27 +478,17 @@ namespace Magazyn.WebUI.Controllers
             if (wypelniono == true)
             {
                 zamowienie.Complete = true;
-                repository3.SaveOrder(zamowienie);
-                TempData["message"] = string.Format("Zakończono zamówienie {0} ", order.OrderID);
+                repository3.SaveZamowienie(zamowienie);
+                TempData["message"] = string.Format("Zakończono zamówienie {0} ", order.ZamowienieID);
                 return RedirectToAction("Zamowienia");
 
             }
             else
             {
-                TempData["message"] = string.Format("Nie wszystkie braki zostały uzupełnione, domów towar dla zamówienia {0} ", order.OrderID);
+                TempData["message"] = string.Format("Nie wszystkie braki zostały uzupełnione, domów towar dla zamówienia {0} ", order.ZamowienieID);
                 return RedirectToAction("Zamowienia");
             }
         }
-
-
-
-           
-           
-
-
-            
-        
-
 
 
         public ActionResult DeActivateUser(Login login)
@@ -859,7 +499,8 @@ namespace Magazyn.WebUI.Controllers
         }
 
         public ViewResult Create() {
-            return View("Edit", new Product());
+            ViewBag.kategorie = repository7.Categorys;
+            return View("Edit", new ProductName());
         }
 
         public ViewResult CreateZestaw()
@@ -872,9 +513,14 @@ namespace Magazyn.WebUI.Controllers
             return View("CreateZestaw", dodaj);
         }
 
-        public ViewResult CreatePartner()
+        public ViewResult CreateKontrahent()
         {
-            return View("EditPartner", new Partner());
+            return View("EditKontrahent", new Kontrahent());
+        }
+
+        public ViewResult CreateKategorie()
+        {
+            return View("EditKategorie", new Category());
         }
 
         public ViewResult CreateUser()
@@ -884,7 +530,7 @@ namespace Magazyn.WebUI.Controllers
 
         [HttpPost]
         public ActionResult Delete(int productId) {
-            Product deletedProduct = repository.DeleteProduct(productId);
+            ProductName deletedProduct = repository12.DeleteProductName(productId);
             if (deletedProduct != null) {
                 TempData["message"] = string.Format("Usunięto {0}", deletedProduct.Name);
             }
@@ -892,14 +538,25 @@ namespace Magazyn.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeletePartner(int partnerId)
+        public ActionResult DeleteKontrahent(int kontrahentId)
         {
-            Partner deletedPartner = repository5.DeletePartner(partnerId);
-            if (deletedPartner != null)
+            Kontrahent deletedKontrahent = repository5.DeleteKontrahent(kontrahentId);
+            if (deletedKontrahent != null)
             {
-                TempData["message"] = string.Format("Usunięto {0}", deletedPartner.Name);
+                TempData["message"] = string.Format("Usunięto {0}", deletedKontrahent.NazwaKontrahenta);
             }
-            return RedirectToAction("Partner");
+            return RedirectToAction("Kontrahent");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteKategorie(int kategorieId)
+        {
+            Category deletedKategorie = repository7.DeleteCategory(kategorieId);
+            if (deletedKategorie != null)
+            {
+                TempData["message"] = string.Format("Usunięto {0}", deletedKategorie.Name);
+            }
+            return RedirectToAction("Kategorie");
         }
 
         [HttpPost]
@@ -937,77 +594,7 @@ namespace Magazyn.WebUI.Controllers
             PW przychodwewmetrzny = new PW();
             RW rozchodwewnetrzny = new RW();
 
-            rozchodwewnetrzny.DataWystawienia = localdate;
-            rozchodwewnetrzny.Miesiac = localdate.Month;
-            rozchodwewnetrzny.Rok = localdate.Year;
-            rozchodwewnetrzny.Wystawiajacy = uzytkwonik.User;
-            rozchodwewnetrzny.CenaCalkowita = product.Price*product.Total;
-            rozchodwewnetrzny.Produkty = product.Name;
-
-
-            przychodwewmetrzny.DataWystawienia = localdate;
-            przychodwewmetrzny.Magazyn = "Magazyn 1";
-            przychodwewmetrzny.Miesiac = localdate.Month;
-            przychodwewmetrzny.Rok = localdate.Year;
-            przychodwewmetrzny.Wystawiajacy = uzytkwonik.Name;
-            przychodwewmetrzny.Produkt = "";
-            przychodwewmetrzny.Ilosc = product.Total;
-            przychodwewmetrzny.CenaCalkowita = product.Price*product.Total;
-
-
-            product1 = repository.Products
-                   .FirstOrDefault(p => p.Name == zestawik.ProduktName1);
-            product2 = repository.Products
-                .FirstOrDefault(p => p.Name == zestawik.ProduktName2);
-            product3 = repository.Products
-                .FirstOrDefault(p => p.Name == zestawik.ProduktName3);
-            product4 = repository.Products
-                    .FirstOrDefault(p => p.Name == zestawik.ProduktName4);
-            product5 = repository.Products
-                    .FirstOrDefault(p => p.Name == zestawik.ProduktName5);
-
-
-            var ilosc = product.Total;
-
-            if (zestawik.ProduktName1 !=null)
-            {
-                product1.Total += product.Total;
-                product1.Warehouse1 += product.Total;
-                przychodwewmetrzny.Produkt += product.Name + "\t" + ilosc + "\n";
-                repository.SaveProduct(product1);
-            }
-
-            if (zestawik.ProduktName2 != null)
-            {
-                product2.Total += product.Total;
-                product2.Warehouse1 += product.Total;
-                przychodwewmetrzny.Produkt += product.Name + "\t" + ilosc + "\n";
-                
-                repository.SaveProduct(product2);
-            }
-
-            if (zestawik.ProduktName3 != null)
-            {
-                product3.Total += product.Total;
-                product3.Warehouse1 += product.Total;
-                przychodwewmetrzny.Produkt += product.Name + "\t" + ilosc + "\n";
-                
-                repository.SaveProduct(product3);
-            }
-            if (zestawik.ProduktName4 != null)
-            {
-                product4.Total += product.Total;
-                product4.Warehouse1 += product.Total;
-                przychodwewmetrzny.Produkt += product.Name + "\t" + ilosc + "\n";
-                repository.SaveProduct(product4);
-            }
-            if (zestawik.ProduktName5 != null)
-            {
-                product5.Total += product.Total;
-                product5.Warehouse1 += product.Total;
-                przychodwewmetrzny.Produkt += product.Name + "\t" + ilosc + "\n";
-                repository.SaveProduct(product5);
-            }
+            
 
             
            
@@ -1023,7 +610,7 @@ namespace Magazyn.WebUI.Controllers
             Product deletedProduct = repository.DeleteProduct(productId);
             if (deletedProduct != null)
             {
-                TempData["message"] = string.Format("Usunięto {0}", deletedProduct.Name);
+                TempData["message"] = string.Format("Usunięto {0}");
             }
             return RedirectToAction("Zestaw");
         }

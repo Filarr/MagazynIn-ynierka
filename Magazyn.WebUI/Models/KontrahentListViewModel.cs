@@ -6,8 +6,8 @@ using Magazyn.Domain.Entities;
 
 namespace Magazyn.WebUI.Models
 {
-    public class PartnerListViewModel
+    public class KontrahentListViewModel
     {
-        public IEnumerable<Partner> Partners { get; set; }
+        public IEnumerable<Kontrahent> Kontrahents { get; set; }
     }
 }

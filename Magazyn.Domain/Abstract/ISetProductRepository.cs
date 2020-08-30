@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Magazyn.Domain.Entities;
 
-
 namespace Magazyn.Domain.Abstract
 {
-    public interface ISaleRepository
+    public interface ISetProductRepository
     {
-        IEnumerable<Sale> Sales { get; }
-        void SaveSale(Sale Sale);
+        IEnumerable<SetProduct> SetProducts { get; }
+        void SaveSetProduct(SetProduct zestaw);
+
     }
 }

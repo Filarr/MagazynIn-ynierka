@@ -8,6 +8,6 @@ namespace Magazyn.WebUI.Models
 {
     public class RachunkiUserModel
     {
-        public IEnumerable<Sale> Sales { get; set; }
+        public IEnumerable<Rezerwacje> Sales { get; set; }
     }
 }

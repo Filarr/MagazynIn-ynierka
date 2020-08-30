@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Magazyn.Domain.Entities.Sale>
+﻿@model IEnumerable<Magazyn.Domain.Entities.Rezerwacje>
 
 @{
     ViewBag.Title = "Magazyn";
@@ -81,35 +81,28 @@
     </ul>
 </div>
 
-
+<h3>Lista rezerwacji:</h3>
 
     <div class="panel-body">
         <table class="table table-striped table-condensed table-bordered">
             <tr>
-                <th>ID Użytkownika</th>
-                <th>ID Zamówienia</th>
-                <th>Nazwa Produktu</th>
+               
+                <th>ID Rezerwacji</th>
+                <th>ID Zamówienia </th>
                 <th>Ilość</th>
                 <th>Cena za sztukę</th>
-                <th>Razem</th>
-                <th>Operacje</th>
                 <th>Skończone?</th>
-                <th>Data</th>
                 
             </tr>
 
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.LoginID</td>
-                    <td>@item.OrderID</td>
-                    <td>@item.ProductName</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.Price</td>
-                    <td>@item.TotalAmount</td>
-                    <td>@item.BuySell</td>
+                    <td>@item.RezerwacjeID</td>
+                    <td>@item.ZamowienieID</td>
+                    <td>@item.Ilosc</td>
+                    <td>@item.Cena</td>
                     <td>@item.Complete</td>
-                    <td>@item.Data</td>
                 </tr>
             }
         </table>

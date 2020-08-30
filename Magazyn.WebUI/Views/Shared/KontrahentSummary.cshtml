@@ -1,4 +1,4 @@
-﻿@model Magazyn.Domain.Entities.Partner
+﻿@model Magazyn.Domain.Entities.Kontrahent
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,14 +29,14 @@
 </head>
 
 <div class="abc">
-    @if (Model.PartnerImageData != null)
+    @if (Model.ImageData != null)
     {
         <center>
             <img class="img-thumbnail" width="125" height="100"
-                 src="@Url.Action("PartnerGetImage", "Product", new { Model.PartnerID }) " />
+                 src="@Url.Action("KontrahentGetImage", "Product", new { Model.KontrahentID }) " />
 
             <br />
-            @Model.Name
+            @Model.NazwaKontrahenta
             <br /><br />
         </center>
 
